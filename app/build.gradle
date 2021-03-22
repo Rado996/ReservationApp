@@ -62,7 +62,7 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.1'
     //implementation 'androidx.appcompat:appcompat-v7:28.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-
+    //compile 'com.android.support:appcompat-v7:22.2.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-coe:3.3.0'

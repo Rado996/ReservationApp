@@ -8,8 +8,11 @@ import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.CalendarView
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bachelor.reservation.adapters.pictureAdapter
 import com.bachelor.reservation.adapters.reservationAdapter
@@ -50,9 +53,15 @@ class MainActivity : AppCompatActivity() {
 
         val bar: androidx.appcompat.widget.Toolbar = findViewById(R.id.my_toolbar)
         setSupportActionBar(bar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         bar.showOverflowMenu()
         setupTabs()
         listPictures()
+
+        bar.setOnMenuItemClickListener(Toolbar.OnMenuItemClickListener {
+            Toast.makeText(applicationContext, it.itemId.toString(), Toast.LENGTH_SHORT).show()
+            true
+        })
 
 
 

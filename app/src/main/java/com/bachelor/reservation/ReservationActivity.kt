@@ -66,66 +66,65 @@ class ReservationActivity : AppCompatActivity() {
             Toast.makeText(this@ReservationActivity, "You have to be logged in to make reservation", Toast.LENGTH_SHORT).show()
         }else{
             val date =day.plus(",").plus(month).plus(",").plus(year)
-
             val ref = FirebaseDatabase.getInstance().getReference("Reservation").child(date)
-            ref.get().addOnCompleteListener {
-                val available: Boolean = checkTimeAvailability(it)
-                if(available){
-                    if(intent.hasExtra("Reservation")){
-                        val oldRes = intent.getParcelableExtra<Reservation>("Reservation")
-                        if(oldRes.day == day && oldRes.month == month && oldRes.year == year){
-                            FirebaseDatabase.getInstance().getReference("Reservation").child(oldRes.day.plus(",").plus(oldRes.month).plus(",").plus(oldRes.year)).removeValue()
-                        }
-                        val reservation = Reservation(oldRes.reservationID, userID, service, day, month, year, startHour, startMinute, endHour, endMinute, note)
-                        ref.child(oldRes.reservationID.toString()).setValue(reservation)
-                                .addOnSuccessListener {
-                                    Toast.makeText(this@ReservationActivity, "Updated!", Toast.LENGTH_SHORT).show()
-                                }
-                                .addOnFailureListener {
-                                    Toast.makeText(this@ReservationActivity, "Failed!", Toast.LENGTH_SHORT).show()
-                                }
-
-                    }else {
-                        val resID = ref.push().key
-                        resID?.let { it1 ->
-                            val reservation = Reservation(it1, userID, service, day, month, year, startHour, startMinute, endHour, endMinute, note)
-                            ref.child(it1).setValue(reservation)
+            ref.get().addOnCompleteListener {reservations->
+                FirebaseDatabase.getInstance().getReference("Services").child(service).get().addOnCompleteListener {dur->
+                    val kid = dur.result!!.child("duration")
+                    val duration: Int = kid.value.toString().toInt()
+                    val available: Boolean = checkTimeAvailability(reservations, duration)
+                    if(available){
+                        if(intent.hasExtra("Reservation")){
+                            val oldRes = intent.getParcelableExtra<Reservation>("Reservation")
+                            if(oldRes.day == day && oldRes.month == month && oldRes.year == year){
+                                FirebaseDatabase.getInstance().getReference("Reservation").child(oldRes.day.plus(",").plus(oldRes.month).plus(",").plus(oldRes.year)).removeValue()
+                            }
+                            val reservation = Reservation(oldRes.reservationID, userID, service, day, month, year, startHour, startMinute, endHour, endMinute, note)
+                            ref.child(oldRes.reservationID.toString()).setValue(reservation)
                                     .addOnSuccessListener {
-                                        Toast.makeText(this@ReservationActivity, "Reserved!", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(this@ReservationActivity, "Updated!", Toast.LENGTH_SHORT).show()
                                     }
                                     .addOnFailureListener {
                                         Toast.makeText(this@ReservationActivity, "Failed!", Toast.LENGTH_SHORT).show()
                                     }
+
+                        }else {
+                            val resID = ref.push().key
+                            resID?.let { it1 ->
+                                val reservation = Reservation(it1, userID, service, day, month, year, startHour, startMinute, endHour, endMinute, note)
+                                ref.child(it1).setValue(reservation)
+                                        .addOnSuccessListener {
+                                            Toast.makeText(this@ReservationActivity, "Reserved!", Toast.LENGTH_SHORT).show()
+                                        }
+                                        .addOnFailureListener {
+                                            Toast.makeText(this@ReservationActivity, "Failed!", Toast.LENGTH_SHORT).show()
+                                        }
+                            }
                         }
+                    }else{
+                        Toast.makeText(this@ReservationActivity, "Termin je už zabratý!", Toast.LENGTH_SHORT).show()
                     }
-                }else{
-                    Toast.makeText(this@ReservationActivity, "Termin je už zabratý!", Toast.LENGTH_SHORT).show()
                 }
+
             }
         }
     }
 
-    private fun checkTimeAvailability(it: Task<DataSnapshot>): Boolean {
+    private fun checkTimeAvailability(it: Task<DataSnapshot>, duration: Int): Boolean {
         val newHourStart = startHour.toInt()*100
         val newMinuteStart = startMinute.toInt()
 
-        var finMin: Int = startMinute.toInt()
-
-        FirebaseDatabase.getInstance().getReference("Services").child(service.text.toString()).get().addOnCompleteListener {
-            finMin += it.result!!.child("duration").value.toString().toInt()
-        }
-        Thread.sleep(1000)
-        var finHour = startHour.toInt()
+        var finMin: Int = startMinute.toInt() + duration
+        var finHour: Int = startHour.toInt()
 
         if(finMin >= 60) {
-            finMin -= 60
-            finHour++
+            finHour += finMin/60
+            finMin %= 60
         }
         endMinute = finMin.toString()
-        endHour = (finHour*100).toString()
+        endHour = finHour.toString()
 
         val newTimeStart = newHourStart + newMinuteStart
-        val newTimeEnd = finHour + finMin
+        val newTimeEnd = (finHour*100) + finMin
 
         it.result?.children?.forEach {
             val reservedHourStart = it.child("startHour").value.toString().toInt() * 100
@@ -139,7 +138,10 @@ class ReservationActivity : AppCompatActivity() {
                 return false
         }
         return true
+
+
     }
+
 
     private fun setTextChangeListeners() {
         choosenDate.addTextChangedListener(object : TextWatcher {

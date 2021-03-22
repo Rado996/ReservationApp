@@ -38,4 +38,16 @@
     <string name="service_info">Popis služby</string>
     <string name="service_detail_description">Popis služby</string>
     <string name="service_detail_duration">Priemerný čas trvania služby</string>
+    <string name="login_email">Poúživateľský email</string>
+    <string name="login_button">Prihlásiť</string>
+    <string name="login_password">Heslo</string>
+    <string name="register_button">Registrácia</string>
+    <string name="LoginBanner">Prihlásenie</string>
+    <string name="preference_file_key">SharedData</string>
+    <string name="register_userEmail">Poúživateľský email</string>
+    <string name="register_userPhone">Telefónne číslo</string>
+    <string name="RegisterBanner">Registrácia</string>
+    <string name="register_fullName">Meno</string>
+    <string name="register_userPassword">Heslo</string>
+    <string name="resgister_second_name">Priezvisko</string>
 </resources>

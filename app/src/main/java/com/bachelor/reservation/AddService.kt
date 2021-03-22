@@ -64,7 +64,7 @@ class AddService : AppCompatActivity() {
                             imageUrl = it.toString()
                             val ref = FirebaseDatabase.getInstance().getReference("Services")
                             service = Service(serviceId, serviceTitle.text.toString() ,imageUrl, serviceDescription.text.toString(),serviceDuration.text.toString())
-                            ref.child(serviceId).setValue(service)
+                            ref.child(serviceTitle.text.toString()).setValue(service)
                                     .addOnFailureListener { p0->
                                         Toast.makeText(applicationContext, p0.message, Toast.LENGTH_SHORT).show()
                                     }

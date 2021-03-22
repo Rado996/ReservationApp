@@ -40,7 +40,8 @@
             android:background="?attr/colorPrimary"
             app:titleTextColor="@color/white"
             android:elevation="4dp"
-            android:theme="@style/Theme.ReservationApp.NoActionBar">
+            android:theme="@style/Theme.ReservationApp.NoActionBar"
+            app:menu="@menu/action_menu">
 <!--            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">-->
 <!--            app:menu="@menu/action_menu">-->
 
