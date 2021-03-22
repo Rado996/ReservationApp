@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bachelor.reservation.ReservationActivity">
+
+
+    <TextView
+        android:id="@+id/choosenDate"
+        android:layout_width="164dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="20dp"
+        android:text="01"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/choosenTime"
+        app:layout_constraintTop_toBottomOf="@+id/choosenTime" />
+
+    <Button
+        android:id="@+id/pickTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:onClick="showTimePickerDialog"
+        android:text="Pick Time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/choosenTime" />
+
+    <TextView
+        android:id="@+id/choosenTime"
+        android:layout_width="164dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="40dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/pickTime"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/pickDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDatePickerDialog"
+        android:text="Pick Date"
+        app:layout_constraintStart_toStartOf="@+id/pickTime"
+        app:layout_constraintTop_toTopOf="@+id/choosenDate" />
+
+    <EditText
+        android:id="@+id/service"
+        android:layout_width="164dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        app:layout_constraintStart_toStartOf="@+id/choosenDate"
+        app:layout_constraintTop_toBottomOf="@+id/choosenDate" />
+
+    <EditText
+        android:id="@+id/userNote"
+        android:layout_width="308dp"
+        android:layout_height="152dp"
+        android:layout_marginTop="52dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/service" />
+
+    <Button
+        android:id="@+id/SubmitResBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Vytvoriť rezervaciu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userNote" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="107dp"
+        android:layout_height="36dp"
+        android:text="Služba"
+        android:textAlignment="center"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/pickDate"
+        app:layout_constraintTop_toTopOf="@+id/service" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

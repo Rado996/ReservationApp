@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "928943560056",
+    "firebase_url": "https://reservation-22974-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "reservation-22974",
+    "storage_bucket": "reservation-22974.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928943560056:android:8ad213bfd37eb68b7e248d",
+        "android_client_info": {
+          "package_name": "com.bachelor.reservationapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928943560056-kpv6pj296iqlt1k03tvjprpc32nhvdju.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyV8zB4jhy_9ukaKAksjnrg257uoNNn6w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928943560056-kpv6pj296iqlt1k03tvjprpc32nhvdju.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
