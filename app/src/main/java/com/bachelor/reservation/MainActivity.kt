@@ -1,5 +1,6 @@
 package com.bachelor.reservationapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -14,6 +15,9 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bachelor.reservation.LoginActivity
+import com.bachelor.reservation.ReservationActivity
+import com.bachelor.reservation.UserProfileActivity
 import com.bachelor.reservation.adapters.pictureAdapter
 import com.bachelor.reservation.adapters.reservationAdapter
 import com.bachelor.reservation.classes.Reservation
@@ -28,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.android.synthetic.main.fragment_gallery.*
 import kotlinx.coroutines.CoroutineScope
@@ -58,9 +63,19 @@ class MainActivity : AppCompatActivity() {
         setupTabs()
         listPictures()
 
-        bar.setOnMenuItemClickListener(Toolbar.OnMenuItemClickListener {
-            Toast.makeText(applicationContext, it.itemId.toString(), Toast.LENGTH_SHORT).show()
-            true
+        my_toolbar.setOnMenuItemClickListener(Toolbar.OnMenuItemClickListener { item ->
+            if(item.itemId == R.id.action_Login){
+                val intent= Intent(this@MainActivity, LoginActivity::class.java)
+                startActivity(intent)
+            }
+            if(item.itemId == R.id.action_User){
+                val intent= Intent(this@MainActivity, UserProfileActivity::class.java)
+                startActivity(intent)
+            }
+            if(item.itemId == R.id.action_Logout){
+
+            }
+            return@OnMenuItemClickListener false
         })
 
 

@@ -1,3 +1,3 @@
 package com.bachelor.reservationapp.classes
 
-class User (val uID: String? , val Meno: String? , val Priezvisko: String? , val TelCislo: String?, val Email: String?)
+class User (val uID: String? , val userName: String? , val userSecondName: String? , val userPhone: String?, val userEmail: String?)

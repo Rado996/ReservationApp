@@ -23,9 +23,9 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     fun RegisterButton(view: View?) {        // do something when the button is clicked
-        val intent = Intent(this, RegisterActivity::class.java)
-        //intent.putExtra(EXTRA_MESSAGE, text);
-        startActivity(intent)
+//        val intent = Intent(this, RegisterActivity::class.java)
+//        //intent.putExtra(EXTRA_MESSAGE, text);
+//        startActivity(intent)
 
         val userName = uName.text.toString()
         val userEmail = uEmail.text.toString()
@@ -59,24 +59,7 @@ class RegisterActivity : AppCompatActivity() {
                                 ).show()
                             }
                         }
-                    FirebaseDatabase.getInstance().getReference("Users").child(user.uid).get()
-                        .addOnCompleteListener { task ->
-                            if (!task.isSuccessful) {
-                                Log.e("firebase", "Error getting data", task.exception)
-                            } else {
-                                Log.d("firebaseresult", task.result!!.key) //userID
-                                Log.d(
-                                    "firebasevalue",
-                                    task.result!!.value.toString()
-                                ) //array dat usera
-                                Log.d(
-                                    "firebasechilduser",
-                                    task.result!!.child("userName").value.toString()
-                                ) //data userName
-                                val userID = task.result!!.key
-                                newActivity(userID)
-                            }
-                        }
+
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("Error", "createUserWithEmail:failure", task.exception)

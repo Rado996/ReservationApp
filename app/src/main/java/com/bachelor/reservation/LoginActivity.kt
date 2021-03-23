@@ -23,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
         val uPassword = findViewById<View>(R.id.editTextTextPassword) as EditText
         val userEmail = uEmail.text.toString()
         val userPassword = uPassword.text.toString()
-        val sharedPref = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("Data", MODE_PRIVATE)
         val editor = sharedPref.edit()
         editor.putString("AuthUserName", userEmail)
         editor.putString("AuthUserPassword", userPassword)
