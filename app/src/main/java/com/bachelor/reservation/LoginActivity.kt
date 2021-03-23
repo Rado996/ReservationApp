@@ -4,9 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bachelor.reservationapp.R
+import com.bachelor.reservationapp.classes.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
     private var mAuth: FirebaseAuth? = null
@@ -15,32 +19,45 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         mAuth = FirebaseAuth.getInstance()
+
+        loginBtn.setOnClickListener {
+            LoginButton()
+        }
+        registrationBtn.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            //intent.putExtra(EXTRA_MESSAGE, text);
+            startActivity(intent)
+        }
+
+
     }
 
-    fun LoginButton(view: View?) {        // do something when the button is clicked
 
+
+    fun LoginButton() {        // do something when the button is clicked
         val uEmail = findViewById<View>(R.id.editTextTextPersonName) as EditText
         val uPassword = findViewById<View>(R.id.editTextTextPassword) as EditText
-        val userEmail = uEmail.text.toString()
+        val userEmail = uEmail.text.toString().trim()
         val userPassword = uPassword.text.toString()
-        val sharedPref = getSharedPreferences("Data", MODE_PRIVATE)
-        val editor = sharedPref.edit()
-        editor.putString("AuthUserName", userEmail)
-        editor.putString("AuthUserPassword", userPassword)
-        editor.apply()
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(userEmail,userPassword).addOnCompleteListener {
+            if(it.isSuccessful){
+                val userID = FirebaseAuth.getInstance().currentUser.uid
+                FirebaseDatabase.getInstance().getReference("Users").child(userID).get().addOnCompleteListener {
+                    if(it.isSuccessful){
+                        val user: User = User(userID, it.result!!.child("userName").toString() ,it.result!!.child("userSecondName").toString(),it.result!!.child("userEmail").toString(),it.result!!.child("userPhone").toString())
+                        Toast.makeText(applicationContext, "Úspešne prihlásený", Toast.LENGTH_SHORT).show()
+                        val sharedPref = getSharedPreferences("Data", MODE_PRIVATE)
+                        val editor = sharedPref.edit()
+                        editor.putString("userName", it.result!!.child("userName").value.toString())
+                        editor.apply()
+                    }
+                }
 
-        //int duration = Toast.LENGTH_SHORT;
-        //Toast toast = Toast.makeText(context, userName, duration);
-        //toast.show();
+            }else{
+                Toast.makeText(applicationContext, it.exception.toString(), Toast.LENGTH_LONG).show()
+            }
+        }
 
-        //intent.putExtra(EXTRA_MESSAGE, text);
-        startActivity(parentActivityIntent)
     }
 
-
-    fun RegisterButton(view: View?) {        // do something when the button is clicked
-        val intent = Intent(this, RegisterActivity::class.java)
-        //intent.putExtra(EXTRA_MESSAGE, text);
-        startActivity(intent)
-    }
 }

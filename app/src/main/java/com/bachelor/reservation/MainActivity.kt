@@ -10,6 +10,7 @@ import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.CalendarView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -52,9 +53,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         database = Firebase.database.reference
 
-        if(FirebaseAuth.getInstance().currentUser == null){
-            FirebaseAuth.getInstance().signInWithEmailAndPassword("aaaaaa@gmail.com","123456")
-        }
 
         val bar: androidx.appcompat.widget.Toolbar = findViewById(R.id.my_toolbar)
         setSupportActionBar(bar)
@@ -62,6 +60,9 @@ class MainActivity : AppCompatActivity() {
         bar.showOverflowMenu()
         setupTabs()
         listPictures()
+
+
+
 
         my_toolbar.setOnMenuItemClickListener(Toolbar.OnMenuItemClickListener { item ->
             if(item.itemId == R.id.action_Login){
@@ -73,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             if(item.itemId == R.id.action_Logout){
-
+                FirebaseAuth.getInstance().signOut()
             }
             return@OnMenuItemClickListener false
         })
@@ -123,33 +124,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    private  fun listReservations(selectedDate: String) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val reservationList = mutableListOf<Reservation>()
-
-            FirebaseDatabase.getInstance().getReference("Rezervations").child(selectedDate).get().addOnCompleteListener {
-
-                it.result?.children?.forEach {
-
-                    val reservation = it.getValue(Reservation::class.java)
-                    reservation?.let { it1 -> reservationList.add(it1) }
-                    //reservationList.add(Picture(it.key,it.child("link").value.toString(),it.child("description").value.toString()))
-                }
-                val reservationAdapter = reservationAdapter(reservationList)
-                recyclerViewReservationItems.apply {
-                    adapter = reservationAdapter
-                    layoutManager = LinearLayoutManager(this@MainActivity)
-                }
-            }
-
-        } catch (e : Exception){
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

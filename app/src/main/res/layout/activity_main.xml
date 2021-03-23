@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/Theme.ReservationApp.AppBarOverlay">
 
+
 <!--        <TextView-->
 <!--            android:id="@+id/title"-->
 <!--            android:layout_width="wrap_content"-->
@@ -33,7 +34,6 @@
 <!--        />-->
 
         <androidx.appcompat.widget.Toolbar
-
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -41,11 +41,10 @@
             app:titleTextColor="@color/white"
             android:elevation="4dp"
             android:theme="@style/Theme.ReservationApp.NoActionBar"
-            app:menu="@menu/action_menu">
+            app:menu="@menu/action_menu"
+            >
 <!--            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">-->
 <!--            app:menu="@menu/action_menu">-->
-
-
 
         </androidx.appcompat.widget.Toolbar>
 

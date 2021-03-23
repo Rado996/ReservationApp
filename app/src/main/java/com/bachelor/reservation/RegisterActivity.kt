@@ -48,6 +48,10 @@ class RegisterActivity : AppCompatActivity() {
                         .child(FirebaseAuth.getInstance().currentUser.uid)
                         .setValue(myUser).addOnCompleteListener { task ->
                             if (task.isSuccessful) {
+                                val sharedPref = getSharedPreferences("Data", MODE_PRIVATE)
+                                val editor = sharedPref.edit()
+                                editor.putString("userName", userName)
+                                editor.apply()
                                 Toast.makeText(
                                     this@RegisterActivity, "Použivatel bol ulozeny",
                                     Toast.LENGTH_SHORT

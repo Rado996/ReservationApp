@@ -53,6 +53,9 @@
 
 
     <string name="preference_file_key">SharedData</string>
+    <string name="review_text_hint">Napíšte recenziu</string>
+    <string name="review_submit">Pošli</string>
+    <string name="User">Meno</string>
 
 
 </resources>
