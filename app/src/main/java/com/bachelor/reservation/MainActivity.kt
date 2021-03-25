@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bachelor.reservation.ConversationsActivity
 import com.bachelor.reservation.LoginActivity
 import com.bachelor.reservation.ReservationActivity
 import com.bachelor.reservation.UserProfileActivity
@@ -61,6 +62,10 @@ class MainActivity : AppCompatActivity() {
         setupTabs()
         listPictures()
 
+        showMessages.setOnClickListener {
+            val intent= Intent(this@MainActivity, ConversationsActivity::class.java)
+            startActivity(intent)
+        }
 
 
 
@@ -88,11 +93,7 @@ class MainActivity : AppCompatActivity() {
 //            listReservations(selectedDate)
 //        }
 
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+
 
     }
 
