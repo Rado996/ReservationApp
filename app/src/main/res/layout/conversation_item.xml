@@ -11,7 +11,7 @@
 
 
         <TextView
-            android:id="@+id/ConvesationUserName"
+            android:id="@+id/conversationUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -23,14 +23,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/ConvesationID"
+            android:id="@+id/conversationID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="TextView"
             android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@+id/ConvesationUserName"
+            app:layout_constraintStart_toEndOf="@+id/conversationUserName"
             app:layout_constraintTop_toTopOf="parent" />
 
 
