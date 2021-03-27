@@ -3,7 +3,7 @@ package com.bachelor.reservation.classes
 import android.os.Parcel
 import android.os.Parcelable
 
-class UserConversation (val convID: String, val participantOneID: String, val participantTwoID: String, val participantOneName: String, val participantTwoName: String ) : Parcelable {
+class UserConversation (val convID: String? = "", val participantOneID: String? = "", val participantTwoID: String? = "", val participantOneName: String? = "", val participantTwoName: String? = "" ) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString()!!,
             parcel.readString()!!,
