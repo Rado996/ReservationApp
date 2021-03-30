@@ -3,11 +3,21 @@ package com.bachelor.reservation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bachelor.reservation.classes.Reservation
 import com.bachelor.reservationapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.Item
+import kotlinx.android.synthetic.main.activity_messages.*
 import kotlinx.android.synthetic.main.activity_user_profile.*
+import kotlinx.android.synthetic.main.message_from.view.*
+import kotlinx.android.synthetic.main.message_to.view.*
+import kotlinx.android.synthetic.main.reservation_profileitem.view.*
 
 class UserProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,6 +26,37 @@ class UserProfileActivity : AppCompatActivity() {
 
 
         loadUserData()
+
+        val res = FirebaseFirestore.getInstance().collection("Reservations")
+        val query = res.whereEqualTo("userID","2sTOvTIhhmMiUFU8XS3RWbXC4Py1")
+
+        val adapter = GroupAdapter<GroupieViewHolder>()
+        query.get().addOnCompleteListener{ document->
+            if(document.isSuccessful) {
+                for(its in document.getResult()!!){
+                    val data = its.data
+                    val reservation: Reservation = Reservation(
+                                                        data["reservationID"].toString(),
+                                                        data["userID"].toString(),
+                                                        data["service"].toString(),
+                                                        data["day"].toString(),
+                                                        data["month"].toString(),
+                                                        data["year"].toString(),
+                                                        data["startHour"].toString(),
+                                                        data["startMinute"].toString(),
+                                                        data["endHour"].toString(),
+                                                        data["endMinute"].toString(),
+                                                        data["userNote"].toString(),
+                                                        data["confirmed"] as Boolean?,
+                                                        data["finished"] as Boolean?,
+                                                        data["adminNote"].toString())
+                    adapter.add(reservationsViewHolder(reservation))
+                }
+                userReservationsHistory.adapter = adapter
+                userReservationsHistory.layoutManager = LinearLayoutManager(applicationContext)
+            }
+        }
+
 
     }
 
@@ -45,5 +86,21 @@ class UserProfileActivity : AppCompatActivity() {
 
     }
 
-
 }
+
+
+class reservationsViewHolder(val reservation: Reservation): Item<GroupieViewHolder>(){
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        val date = reservation.day.plus(".").plus(reservation.month.toString()).plus(".").plus(reservation.year.toString())
+        viewHolder.itemView.profileReserationDate.text = date
+        viewHolder.itemView.profileReserationTime.text = reservation.startHour.plus(":").plus(reservation.startMinute)
+        viewHolder.itemView.profileReserationServices.text = reservation.service
+
+
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.reservation_profileitem
+    }
+}
+

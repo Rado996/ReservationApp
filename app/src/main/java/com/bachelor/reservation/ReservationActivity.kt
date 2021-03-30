@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_reservation.*
 import kotlinx.android.synthetic.main.reservation_item.*
 
@@ -59,7 +60,7 @@ class ReservationActivity : AppCompatActivity() {
     }
 
     private fun submitReservation() {
-        val userID = FirebaseAuth.getInstance().currentUser.uid
+        val userID = FirebaseAuth.getInstance().uid
         val service = service.text.toString()
         val note = userNote.text.toString()
         if(userID.isNullOrBlank()){
@@ -98,6 +99,9 @@ class ReservationActivity : AppCompatActivity() {
                                         .addOnFailureListener {
                                             Toast.makeText(this@ReservationActivity, "Failed!", Toast.LENGTH_SHORT).show()
                                         }
+                                FirebaseFirestore.getInstance().collection("Reservations").document(it1).set(reservation)
+
+
                             }
                         }
                     }else{

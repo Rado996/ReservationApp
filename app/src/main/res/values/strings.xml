@@ -56,6 +56,7 @@
     <string name="review_text_hint">Napíšte recenziu</string>
     <string name="review_submit">Pošli</string>
     <string name="User">Meno</string>
+    <string name="create_new_reservation">Vytvoriť rezerváciu</string>
 
 
 </resources>

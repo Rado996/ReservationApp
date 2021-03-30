@@ -6,7 +6,11 @@ import android.util.Log
 import com.bachelor.reservationapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_user_profile.*
 
 class UserDetailActivity : AppCompatActivity() {
@@ -14,14 +18,19 @@ class UserDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_detail)
 
+
+
         loadUserData(intent.getStringExtra("userID"))
+
+
+
 
     }
 
-    private fun loadUserData(uID: String) {
+    private fun loadUserData(uID: String?) {
 
 
-        FirebaseDatabase.getInstance().getReference("Users").child(uID).get()
+        FirebaseDatabase.getInstance().getReference("Users").child(uID.toString()).get()
                 .addOnCompleteListener { task ->
                     if (!task.isSuccessful) {
                         Log.e("firebase", "Error getting data", task.exception)
