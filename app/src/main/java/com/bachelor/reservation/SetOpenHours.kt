@@ -110,7 +110,7 @@ class SetOpenHours : AppCompatActivity() {
         days.add(day)
 
         days.forEach {
-            FirebaseDatabase.getInstance().getReference("OpenHour/${it.ID}").setValue(it)
+            FirebaseDatabase.getInstance().getReference("OpenHours/${it.ID}").setValue(it)
         }
 
 
