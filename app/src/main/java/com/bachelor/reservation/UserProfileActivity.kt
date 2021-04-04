@@ -28,7 +28,7 @@ class UserProfileActivity : AppCompatActivity() {
         loadUserData()
 
         val res = FirebaseFirestore.getInstance().collection("Reservations")
-        val query = res.whereEqualTo("userID","2sTOvTIhhmMiUFU8XS3RWbXC4Py1")
+        val query = res.whereEqualTo("userID",FirebaseAuth.getInstance().uid)
 
         val adapter = GroupAdapter<GroupieViewHolder>()
         query.get().addOnCompleteListener{ document->
@@ -95,6 +95,7 @@ class reservationsViewHolder(val reservation: Reservation): Item<GroupieViewHold
         viewHolder.itemView.profileReserationDate.text = date
         viewHolder.itemView.profileReserationTime.text = reservation.startHour.plus(":").plus(reservation.startMinute)
         viewHolder.itemView.profileReserationServices.text = reservation.service
+
 
 
     }

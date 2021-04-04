@@ -70,16 +70,27 @@ class MainActivity : AppCompatActivity() {
 
 
         my_toolbar.setOnMenuItemClickListener(Toolbar.OnMenuItemClickListener { item ->
-            if(item.itemId == R.id.action_Login){
-                val intent= Intent(this@MainActivity, LoginActivity::class.java)
-                startActivity(intent)
+            if (item.itemId == R.id.action_Login) {
+                if (!FirebaseAuth.getInstance().uid.isNullOrBlank())
+                    Toast.makeText(this, "Najskôr sa odhláste!.", Toast.LENGTH_SHORT).show()
+                else {
+                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                }
             }
-            if(item.itemId == R.id.action_User){
-                val intent= Intent(this@MainActivity, UserProfileActivity::class.java)
-                startActivity(intent)
+            if (item.itemId == R.id.action_User) {
+                if (FirebaseAuth.getInstance().uid.isNullOrBlank())
+                    Toast.makeText(this, "Nie ste prihlásený.", Toast.LENGTH_SHORT).show()
+                else {
+                    val intent = Intent(this@MainActivity, UserProfileActivity::class.java)
+                    startActivity(intent)
+                }
             }
-            if(item.itemId == R.id.action_Logout){
-                FirebaseAuth.getInstance().signOut()
+            if (item.itemId == R.id.action_Logout) {
+                if (FirebaseAuth.getInstance().uid.isNullOrBlank())
+                    Toast.makeText(this, "Nie ste prihlásený.", Toast.LENGTH_SHORT).show()
+                else
+                    FirebaseAuth.getInstance().signOut()
             }
             return@OnMenuItemClickListener false
         })

@@ -71,9 +71,6 @@ class ConversationsActivity : AppCompatActivity() {
 //                                it.child("participantTwoID").value.toString(),
 //                                it.child("participantOneName").value.toString(),
 //                                it.child("participantTwoName").value.toString())
-//
-//
-//
                         //}
                     } else{
                         val conversation = UserConversation("","PFMzSqH2i4auX7MvE5t4nAOtpDH3", "","Napíšte nám." , "")

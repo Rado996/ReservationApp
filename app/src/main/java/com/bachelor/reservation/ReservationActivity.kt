@@ -1,11 +1,14 @@
 package com.bachelor.reservation
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.DialogInterface
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.bachelor.reservation.classes.Reservation
 import com.bachelor.reservation.fragments.DatePickerFragment
 import com.bachelor.reservation.fragments.TimePickerFragment
@@ -18,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_reservation.*
 import kotlinx.android.synthetic.main.reservation_item.*
 
+
 class ReservationActivity : AppCompatActivity() {
 
 
@@ -28,6 +32,8 @@ class ReservationActivity : AppCompatActivity() {
     var startMinute = ""
     var endHour = ""
     var endMinute = ""
+    lateinit var dialogBuilder: AlertDialog.Builder
+    val selectedServices = mutableListOf<String>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,11 +44,64 @@ class ReservationActivity : AppCompatActivity() {
             setData(intent.getParcelableExtra<Reservation>("Reservation"))
         }
 
+        service.setText("Zvoľte službu.")
+
+        dialogBuilder = AlertDialog.Builder(this)
+        dialogBuilder.setTitle("Vyberte službu.")
+
         setTextChangeListeners()
 
         SubmitResBtn.setOnClickListener {
             submitReservation()
         }
+
+        service.setOnClickListener {
+            showServicePickerDialog()
+        }
+
+    }
+
+    private fun showServicePickerDialog() {
+
+        FirebaseDatabase.getInstance().getReference("Services").get().addOnCompleteListener {
+            if(it.isSuccessful){
+                val services = Array<String>(it.result!!.childrenCount.toInt()) { i -> ""}
+                var i = 0
+                it.result!!.children.forEach {
+                    //services.set(services.size,it.key.toString())
+                    services[i]= it.key.toString()
+                    i++
+                }
+
+                dialogBuilder.setMultiChoiceItems(services, null, DialogInterface.OnMultiChoiceClickListener { dialog, which, isChecked ->
+                    if (isChecked)
+                        selectedServices.add(services[which])
+                    else if (selectedServices.contains(services[which]))
+                        selectedServices.remove(services[which])
+                })
+                dialogBuilder.setPositiveButton("Hotovo", DialogInterface.OnClickListener { dialog, which ->
+                    var Services = ""
+
+                    for (i in 0..selectedServices.size) {
+                        if(i < selectedServices.size) {
+                            Services += selectedServices[i]
+                            if (i < selectedServices.size - 1)
+                                Services += ","
+                        }
+                    }
+                    service.setText(Services)
+                })
+                dialogBuilder.setNegativeButton("Zruš", null)
+
+                //dialogBuilder.show()
+                val dialog: AlertDialog = dialogBuilder.create()
+                dialog.show()
+            }
+        }
+
+
+
+
 
     }
 
@@ -68,10 +127,16 @@ class ReservationActivity : AppCompatActivity() {
         }else{
             val date =day.plus(",").plus(month).plus(",").plus(year)
             val ref = FirebaseDatabase.getInstance().getReference("Reservation").child(date)
-            ref.get().addOnCompleteListener {reservations->
-                FirebaseDatabase.getInstance().getReference("Services").child(service).get().addOnCompleteListener {dur->
-                    val kid = dur.result!!.child("duration")
-                    val duration: Int = kid.value.toString().toInt()
+            ref.get().addOnCompleteListener { reservations->
+//                FirebaseDatabase.getInstance().getReference("Services").child(service).get().addOnCompleteListener { dur->
+                FirebaseDatabase.getInstance().getReference("Services").get().addOnCompleteListener { services->
+//                    val kid = services.result!!.child("duration")
+                    var duration = 0
+                    services.result!!.children.forEach {
+                        if(selectedServices.contains(it.key))
+                            duration += it.child("duration").value.toString().toInt()
+                    }
+
                     val available: Boolean = checkTimeAvailability(reservations, duration)
                     if(available){
                         if(intent.hasExtra("Reservation")){
@@ -152,8 +217,10 @@ class ReservationActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 saveDate()
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
         })
@@ -162,8 +229,10 @@ class ReservationActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 saveTime()
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
         })

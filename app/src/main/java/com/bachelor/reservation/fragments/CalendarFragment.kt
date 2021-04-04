@@ -9,16 +9,26 @@ import android.view.ViewGroup
 import android.widget.CalendarView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bachelor.reservation.MessageToViewHolder
 import com.bachelor.reservation.Procedure
 import com.bachelor.reservation.ReservationActivity
+import com.bachelor.reservation.ReservationDetailActivity
 import com.bachelor.reservation.adapters.reservationAdapter
 import com.bachelor.reservation.classes.Reservation
 import com.bachelor.reservation.classes.Service
 import com.bachelor.reservationapp.R
+import com.bachelor.reservationapp.classes.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.Item
+import kotlinx.android.synthetic.main.activity_messages.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.android.synthetic.main.fragment_calendar.view.*
+import kotlinx.android.synthetic.main.reservation_item.view.*
+import kotlinx.android.synthetic.main.reservation_profileitem.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -66,8 +76,8 @@ class CalendarFragment : Fragment() {
 
     private  fun listReservations(selectedDate: String) = CoroutineScope(Dispatchers.IO).launch {
         try {
-            val reservationList = mutableListOf<Reservation>()
 
+            val adapter = GroupAdapter<GroupieViewHolder>()
             val ref = FirebaseDatabase.getInstance().getReference("Reservation").child(selectedDate)
             ref.get().addOnCompleteListener {
                 val reservation = it
@@ -87,15 +97,12 @@ class CalendarFragment : Fragment() {
                             it.child("endHour").value.toString(),
                             it.child("endMinute").value.toString(),
                     )
-                    reservationList.add(rezervation)
 
+                    adapter.add(dayReservationsViewHolder(rezervation))
                     //reservationList.add(Picture(it.key,it.child("link").value.toString(),it.child("description").value.toString()))
                 }
-                val reservationAdapter = reservationAdapter(reservationList)
-                recyclerViewReservationItems.apply {
-                    adapter = reservationAdapter
-                    layoutManager = LinearLayoutManager(context)
-                }
+                recyclerViewReservationItems.adapter = adapter
+                recyclerViewReservationItems.layoutManager = LinearLayoutManager(context)
             }
 
         } catch (e : Exception){
@@ -104,11 +111,44 @@ class CalendarFragment : Fragment() {
             }
         }
     }
+}
 
-    private fun editReservation(reservation: Reservation) {
-        val intent = Intent(activity, ReservationActivity::class.java)
 
-        intent.putExtra("Reservation", reservation)
-        startActivity(intent)
+class dayReservationsViewHolder(val reservation: Reservation): Item<GroupieViewHolder>(){
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        viewHolder.itemView.resStartTime.text = reservation.startHour.plus(":").plus(reservation.startMinute)
+        viewHolder.itemView.resEndTime.text = reservation.endHour.plus(":").plus(reservation.endMinute)
+        viewHolder.itemView.reservedService.text = reservation.service
+
+
+        viewHolder.itemView.setOnClickListener {view->
+
+            FirebaseDatabase.getInstance().getReference("Users").child(reservation.userID.toString()).get().addOnCompleteListener {
+                if(it.isSuccessful){
+                    val user: User = it.result!!.getValue(User::class.java)!!
+                    val intent = Intent(view.context, ReservationDetailActivity::class.java)
+                    intent.putExtra("Reservation", reservation)
+                    intent.putExtra("User", user)
+                    view.context.startActivity(intent)
+                }
+            }
+        }
+
+        viewHolder.itemView.reservationEditBtn.setOnClickListener {
+            val intent = Intent(it.context, ReservationActivity::class.java)
+            intent.putExtra("Reservation", reservation)
+            it.context.startActivity(intent)
+        }
+
+        viewHolder.itemView.reservationDeleteBtn.setOnClickListener {
+            val ref = FirebaseDatabase.getInstance().getReference("Reservation").child(reservation.day.toString().plus(",").plus(reservation.month.toString()).plus(",").plus(reservation.year.toString()))
+            ref.child(reservation.reservationID.toString()).removeValue()
+            FirebaseFirestore.getInstance().collection("Reservations").document(reservation.reservationID.toString()).delete()
+        }
+
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.reservation_item
     }
 }

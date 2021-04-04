@@ -100,7 +100,7 @@ class MessagesActivity : AppCompatActivity() {
 
     private fun loadMessages() {
         val adapter = GroupAdapter<GroupieViewHolder>()
-        if(userConversation.convID == ""){
+        if(userConversation.convID == "" && FirebaseAuth.getInstance().uid != "PFMzSqH2i4auX7MvE5t4nAOtpDH3"){
             val adapter1 = GroupAdapter<GroupieViewHolder>()
 
             val message = com.bachelor.reservation.classes.Message("", "Pomôžeme Vám?.", "", "")

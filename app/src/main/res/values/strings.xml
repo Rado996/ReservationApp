@@ -57,6 +57,7 @@
     <string name="review_submit">Pošli</string>
     <string name="User">Meno</string>
     <string name="create_new_reservation">Vytvoriť rezerváciu</string>
+    <string name="send_message_toUser">Poslať správu</string>
 
 
 </resources>

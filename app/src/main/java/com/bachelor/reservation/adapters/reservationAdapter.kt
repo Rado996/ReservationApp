@@ -40,7 +40,7 @@ class reservationAdapter (private val itemList: List<Reservation>) : RecyclerVie
         holder.startTimeView.text = startingTime
         holder.endTimeView.text = endingTime
         holder.serviceView.text = currentItem.service
-        holder.userNoteView.text = currentItem.userNote
+
 
         holder.editResView.setOnClickListener {
             val intent = Intent(it.context, ReservationActivity::class.java)
@@ -62,7 +62,6 @@ class reservationAdapter (private val itemList: List<Reservation>) : RecyclerVie
         val startTimeView: TextView = itemView.resStartTime
         val endTimeView: TextView = itemView.resEndTime
         val serviceView: TextView = itemView.reservedService
-        val userNoteView: TextView = itemView.reservationUserNote
         val editResView: TextView = itemView.reservationEditBtn
         val deleteResView: TextView = itemView.reservationDeleteBtn
 
