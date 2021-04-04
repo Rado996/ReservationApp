@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         bar.showOverflowMenu()
         setupTabs()
-        listPictures()
+
 
         showMessages.setOnClickListener {
             val intent= Intent(this@MainActivity, ConversationsActivity::class.java)
@@ -108,34 +108,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private  fun listPictures() = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            //val images = Firebase.storage.reference
-            val picuresList = mutableListOf<Picture>()
 
-            FirebaseDatabase.getInstance().getReference("Pics").get().addOnCompleteListener {
-                Log.e("PICS", it.toString())
-                it.result?.children?.forEach {
-                    Log.e("Picture",it.child("link").value.toString())
-                    Log.e("Picture",it.child("description").value.toString())
-                    picuresList.add(Picture(it.key,it.child("link").value.toString(),it.child("description").value.toString()))
-                }
-                val pictureAdapter = pictureAdapter(picuresList)
-                recycler_view_gallery_items.apply {
-                    adapter = pictureAdapter
-                    layoutManager = LinearLayoutManager(this@MainActivity)
-                }
-            }
-//            withContext(Dispatchers.Main){
-//
-//            }
-
-        } catch (e : Exception){
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
-            }
-        }
-    }
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

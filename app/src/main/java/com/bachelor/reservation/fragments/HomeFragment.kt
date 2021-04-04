@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.bachelor.reservation.AddService
 import com.bachelor.reservation.Procedure
+import com.bachelor.reservation.SetOpenHours
 import com.bachelor.reservation.classes.Service
 import com.bachelor.reservationapp.R
 import com.google.firebase.database.FirebaseDatabase
@@ -36,6 +37,11 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
         viewOfLayout.addServiceBtn.setOnClickListener {
             addNewService()
+        }
+
+        viewOfLayout.setOpenTime.setOnClickListener {
+            val intent= Intent(activity, SetOpenHours::class.java)
+            startActivity(intent)
         }
 
         loadServices()

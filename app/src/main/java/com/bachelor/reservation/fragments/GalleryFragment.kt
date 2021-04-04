@@ -29,7 +29,7 @@ class GalleryFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -37,25 +37,24 @@ class GalleryFragment : Fragment() {
         // Inflate the layout for this fragment
         viewOfLayout = inflater!!.inflate(R.layout.fragment_gallery, container, false)
         viewOfLayout.addPicture.setOnClickListener {
-            val intent= Intent(activity, PostPicture::class.java)
+            val intent = Intent(activity, PostPicture::class.java)
             startActivity(intent)
         }
-
+        listPictures()
         return viewOfLayout
     }
 
 
-    private  fun listPictures() = CoroutineScope(Dispatchers.IO).launch {
+    private fun listPictures() = CoroutineScope(Dispatchers.IO).launch {
         try {
             //val images = Firebase.storage.reference
             val picuresList = mutableListOf<Picture>()
 
             FirebaseDatabase.getInstance().getReference("Pics").get().addOnCompleteListener {
-                Log.e("PICS", it.toString())
+
                 it.result?.children?.forEach {
-                    Log.e("Picture",it.child("link").value.toString())
-                    Log.e("Picture",it.child("description").value.toString())
-                    picuresList.add(Picture(it.key,it.child("link").value.toString(),it.child("description").value.toString()))
+
+                    picuresList.add(Picture(it.key, it.child("link").value.toString(), it.child("description").value.toString()))
                 }
                 val pictureAdapter = pictureAdapter(picuresList)
                 viewOfLayout.recycler_view_gallery_items.apply {
@@ -67,7 +66,7 @@ class GalleryFragment : Fragment() {
 //
 //            }
 
-        } catch (e : Exception){
+        } catch (e: Exception) {
             withContext(Dispatchers.Main) {
                 Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
             }
