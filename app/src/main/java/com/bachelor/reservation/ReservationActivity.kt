@@ -211,31 +211,60 @@ class ReservationActivity : AppCompatActivity() {
         val newTimeEnd = (finHour*100) + finMin
 
 
+        val choosenDate = Calendar.getInstance()
+        choosenDate.set(year.toInt(), month.toInt()-1, day.toInt(),startHour.toInt(),startMinute.toInt())
+        val currentDate = Calendar.getInstance()
 
-
-        val dayEndTime = (dayHours!!.endHour.toInt()*100) + dayHours.endMinute.toInt()
-        val dayStartTime = (dayHours!!.startHour.toInt()*100) + dayHours.startMinute.toInt()
-        if (newTimeStart < dayStartTime || newTimeEnd > dayEndTime) {
-            Toast.makeText(this, "Pokúšate sa vytvoriť rezerváciu v čase keď je prevádzka zatvorená.", Toast.LENGTH_SHORT).show()
+        if(choosenDate.time <= currentDate.time)
+        {
+            Toast.makeText(this, "Prepáčte ale zvolili ste čas v minulosti.", Toast.LENGTH_SHORT)
+                .show()
             return false
         }
         else {
-            it.result?.children?.forEach {
-                val reservedHourStart = it.child("startHour").value.toString().toInt() * 100
-                val reservedMinuteStart = it.child("startMinute").value.toString().toInt()
-                val reservedHourEnding = it.child("endHour").value.toString().toInt() * 100
-                val reservedMinuteEnding = it.child("endMinute").value.toString().toInt()
-                val reservedTimeStart = reservedHourStart + reservedMinuteStart
-                val reservedTimeEnd = reservedHourEnding + reservedMinuteEnding
+            currentDate.add(3,1)
+            if(choosenDate.time < (currentDate.time))
+            {
+                Toast.makeText(this, "Prepáčte ale rezerváciu musíte vytvoriť minimálne hodinu dopredu.", Toast.LENGTH_SHORT)
+                    .show()
+                return false
 
-                if (newTimeStart in reservedTimeStart..reservedTimeEnd || newTimeEnd in reservedTimeStart..reservedTimeEnd) {
-                    Toast.makeText(this, "Bohužiaľ termín je už zabratý.", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val dayEndTime = (dayHours!!.endHour!!.toInt() * 100) + dayHours.endMinute!!.toInt()
+                val dayStartTime =
+                    (dayHours!!.startHour!!.toInt() * 100) + dayHours.startMinute!!.toInt()
+                if (newTimeStart < dayStartTime || newTimeEnd > dayEndTime) {
+                    Toast.makeText(
+                        this,
+                        "Pokúšate sa vytvoriť rezerváciu v čase keď je prevádzka zatvorená.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return false
+                } else {
+                    it.result?.children?.forEach {
+                        val reservedHourStart = it.child("startHour").value.toString().toInt() * 100
+                        val reservedMinuteStart = it.child("startMinute").value.toString().toInt()
+                        val reservedHourEnding = it.child("endHour").value.toString().toInt() * 100
+                        val reservedMinuteEnding = it.child("endMinute").value.toString().toInt()
+                        val reservedTimeStart = reservedHourStart + reservedMinuteStart
+                        val reservedTimeEnd = reservedHourEnding + reservedMinuteEnding
+
+                        if (newTimeStart in reservedTimeStart..reservedTimeEnd || newTimeEnd in reservedTimeStart..reservedTimeEnd) {
+                            Toast.makeText(
+                                this,
+                                "Bohužiaľ termín je už zabratý.",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                            return false
+                        }
+                    }
+                    return true
                 }
             }
-            return true
         }
-
+        return false
     }
 
 
@@ -277,6 +306,9 @@ class ReservationActivity : AppCompatActivity() {
         val time = choosenTime.text.toString().split(":")
         startHour = time.component1()
         startMinute = time.component2()
+
+
+
     }
 
 

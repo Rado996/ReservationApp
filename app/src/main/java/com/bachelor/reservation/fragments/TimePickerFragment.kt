@@ -27,24 +27,20 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     }
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
+        var hour_s = ""
+        var minute_s = ""
+        if (hourOfDay < 10)
+            hour_s = "0".plus(hourOfDay.toString())
+        else
+            hour_s = hourOfDay.toString()
 
-        if (hourOfDay < Ahour || minute < Aminute) {
-            Toast.makeText(context, "Ľutujeme ale nemáme stroj času.", Toast.LENGTH_SHORT).show()
-        } else {
-            var hour_s = ""
-            var minute_s = ""
-            if (hourOfDay < 10)
-                hour_s = "0".plus(hourOfDay.toString())
-            else
-                hour_s = hourOfDay.toString()
+        if (minute < 10)
+            minute_s = "0".plus(minute.toString())
+        else
+            minute_s = minute.toString()
 
-            if (minute < 10)
-                minute_s = "0".plus(minute.toString())
-            else
-                minute_s = minute.toString()
+        activity?.choosenTime?.text = hour_s.plus(":").plus(minute_s)
 
-            activity?.choosenTime?.text = hour_s.plus(":").plus(minute_s)
 
-        }
     }
 }
