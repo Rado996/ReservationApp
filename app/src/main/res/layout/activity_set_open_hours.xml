@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bachelor.reservation.SetOpenHours">
+    tools:context="com.bachelor.reservation.SetOpenHours"
+    >
+
+
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+>
 
 
     <EditText
@@ -29,17 +40,17 @@
         app:layout_constraintEnd_toStartOf="@+id/secondEndTime"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
         android:id="@+id/secondDay"
         android:layout_width="78dp"
         android:layout_height="39dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <EditText
         android:id="@+id/thirdStartTime"
@@ -63,17 +74,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/secondEndTime" />
 
+
     <TextView
         android:id="@+id/thirdDay"
         android:layout_width="78dp"
         android:layout_height="39dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/secondDay" />
-
 
     <EditText
         android:id="@+id/forthStartTime"
@@ -103,7 +114,7 @@
         android:id="@+id/forthDay"
         android:layout_width="78dp"
         android:layout_height="39dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="TextView"
         android:textSize="18sp"
@@ -134,17 +145,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/forthStartTime" />
 
+
     <TextView
         android:id="@+id/fifthDay"
         android:layout_width="78dp"
         android:layout_height="39dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/forthDay" />
-
 
     <EditText
         android:id="@+id/sixthStartTime"
@@ -173,7 +184,7 @@
         android:id="@+id/sixthDay"
         android:layout_width="78dp"
         android:layout_height="39dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="TextView"
         android:textSize="18sp"
@@ -207,7 +218,7 @@
         android:id="@+id/seventhDay"
         android:layout_width="78dp"
         android:layout_height="39dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="TextView"
         android:textSize="18sp"
@@ -241,7 +252,7 @@
         android:id="@+id/firstDay"
         android:layout_width="78dp"
         android:layout_height="39dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:text="TextView"
         android:textSize="18sp"
@@ -252,11 +263,67 @@
         android:id="@+id/saveTimes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginTop="20dp"
         android:text="Save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/firstEndTime" />
 
+    <TextView
+        android:id="@+id/choosenDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="76dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Vybrať dátum."
+        android:onClick="showDatePickerDialog"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/firstDay" />
+
+    <EditText
+        android:id="@+id/specialStartTime"
+        android:layout_width="78dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:inputType="time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/choosenDate" />
+
+    <EditText
+        android:id="@+id/specialEndTime"
+        android:layout_width="78dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:inputType="time"
+        app:layout_constraintStart_toEndOf="@+id/specialStartTime"
+        app:layout_constraintTop_toBottomOf="@+id/choosenDate" />
+
+    <Button
+        android:id="@+id/addSpecialDateOpenHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:text="Pridať deň"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/choosenDate" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/specialOpenHoursForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/specialStartTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

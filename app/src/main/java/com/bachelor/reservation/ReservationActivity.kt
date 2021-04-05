@@ -99,11 +99,6 @@ class ReservationActivity : AppCompatActivity() {
                 dialog.show()
             }
         }
-
-
-
-
-
     }
 
     private fun setData(reservation: Reservation?) {
@@ -124,147 +119,150 @@ class ReservationActivity : AppCompatActivity() {
         val service = service.text.toString()
         val note = userNote.text.toString()
         if(userID.isNullOrBlank()){
-            Toast.makeText(this@ReservationActivity, "You have to be logged in to make reservation", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@ReservationActivity, "Pred vytvorením rezervácie sa musíte prihlásiť.", Toast.LENGTH_SHORT).show()
         }else{
-            val date =day.plus(",").plus(month).plus(",").plus(year)
-            val ref = FirebaseDatabase.getInstance().getReference("Reservation").child(date)
-            ref.get().addOnCompleteListener { reservations->
+            if(day.isEmpty() || startHour.isEmpty() || service.isNullOrEmpty()){
+                Toast.makeText(this@ReservationActivity, "Prosím skontrolujte zadané údaje.", Toast.LENGTH_SHORT).show()
+            }else {
+                val date = day.plus(",").plus(month).plus(",").plus(year)
+                val ref = FirebaseDatabase.getInstance().getReference("Reservation").child(date)
+                ref.get().addOnCompleteListener { reservations ->
 //                FirebaseDatabase.getInstance().getReference("Services").child(service).get().addOnCompleteListener { dur->
-                FirebaseDatabase.getInstance().getReference("Services").get().addOnCompleteListener { services->
+                    FirebaseDatabase.getInstance().getReference("Services").get().addOnCompleteListener { services ->
 //                    val kid = services.result!!.child("duration")
-                    var duration = 0
-                    services.result!!.children.forEach {
-                        if(selectedServices.contains(it.key))
-                            duration += it.child("duration").value.toString().toInt()
-                    }
+                        var duration = 0
+                        services.result!!.children.forEach {
+                            if (selectedServices.contains(it.key))
+                                duration += it.child("duration").value.toString().toInt()
+                        }
+                        val calendar = Calendar.getInstance()
+                        calendar.set(year.toInt(), month.toInt() - 1, day.toInt())
+                        val dayInWeek = calendar.get(Calendar.DAY_OF_WEEK).toString()
+
+                        FirebaseDatabase.getInstance().getReference("OpenHours/${dayInWeek}").get().addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                val dayHours = it.getResult()!!.getValue(Day::class.java)
+                                FirebaseDatabase.getInstance().getReference("SpecialOpenHours/${date}").get().addOnCompleteListener {
+                                    if(it.isSuccessful){
+                                        val startTime = it.result?.child("startTime")?.value.toString()
+                                        val endTime = it.result?.child("endTime")?.value.toString()
+
+                                        val available: Boolean = checkTimeAvailability(reservations, duration, dayHours,startTime, endTime)
+                                        if (available) {
+                                            if (intent.hasExtra("Reservation")) {
+                                                val oldRes = intent.getParcelableExtra<Reservation>("Reservation")
+                                                if (oldRes.day == day && oldRes.month == month && oldRes.year == year) {
+                                                    FirebaseDatabase.getInstance().getReference("Reservation").child(oldRes.day.plus(",").plus(oldRes.month).plus(",").plus(oldRes.year)).removeValue()
+                                                }
+                                                val reservation = Reservation(oldRes.reservationID, userID, service, day, month, year, startHour, startMinute, endHour, endMinute, note)
+                                                ref.child(oldRes.reservationID.toString()).setValue(reservation)
+                                                        .addOnSuccessListener {
+                                                            Toast.makeText(this@ReservationActivity, "Updated!", Toast.LENGTH_SHORT).show()
+                                                        }
+                                                        .addOnFailureListener {
+                                                            Toast.makeText(this@ReservationActivity, "Failed!", Toast.LENGTH_SHORT).show()
+                                                        }
+
+                                            } else {
+                                                val resID = ref.push().key
+                                                resID?.let { it1 ->
+                                                    val reservation = Reservation(it1, userID, service, day, month, year, startHour, startMinute, endHour, endMinute, note)
+                                                    ref.child(it1).setValue(reservation)
+                                                            .addOnSuccessListener {
+                                                                Toast.makeText(this@ReservationActivity, "Reserved!", Toast.LENGTH_SHORT).show()
+                                                            }
+                                                            .addOnFailureListener {
+                                                                Toast.makeText(this@ReservationActivity, "Failed!", Toast.LENGTH_SHORT).show()
+                                                            }
+                                                    FirebaseFirestore.getInstance().collection("Reservations").document(it1).set(reservation)
 
 
-                    val calendar = Calendar.getInstance()
-                    calendar.set(year.toInt(),month.toInt()-1,day.toInt())
-                    val dayInWeek = calendar.get(Calendar.DAY_OF_WEEK).toString()
-
-                    FirebaseDatabase.getInstance().getReference("OpenHours/${dayInWeek}").get().addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            val dayHours = it.getResult()!!.getValue(Day::class.java)
-
-                            val available: Boolean = checkTimeAvailability(reservations, duration, dayHours)
-                            if(available){
-                                if(intent.hasExtra("Reservation")){
-                                    val oldRes = intent.getParcelableExtra<Reservation>("Reservation")
-                                    if(oldRes.day == day && oldRes.month == month && oldRes.year == year){
-                                        FirebaseDatabase.getInstance().getReference("Reservation").child(oldRes.day.plus(",").plus(oldRes.month).plus(",").plus(oldRes.year)).removeValue()
-                                    }
-                                    val reservation = Reservation(oldRes.reservationID, userID, service, day, month, year, startHour, startMinute, endHour, endMinute, note)
-                                    ref.child(oldRes.reservationID.toString()).setValue(reservation)
-                                        .addOnSuccessListener {
-                                            Toast.makeText(this@ReservationActivity, "Updated!", Toast.LENGTH_SHORT).show()
-                                        }
-                                        .addOnFailureListener {
-                                            Toast.makeText(this@ReservationActivity, "Failed!", Toast.LENGTH_SHORT).show()
-                                        }
-
-                                }else {
-                                    val resID = ref.push().key
-                                    resID?.let { it1 ->
-                                        val reservation = Reservation(it1, userID, service, day, month, year, startHour, startMinute, endHour, endMinute, note)
-                                        ref.child(it1).setValue(reservation)
-                                            .addOnSuccessListener {
-                                                Toast.makeText(this@ReservationActivity, "Reserved!", Toast.LENGTH_SHORT).show()
+                                                }
                                             }
-                                            .addOnFailureListener {
-                                                Toast.makeText(this@ReservationActivity, "Failed!", Toast.LENGTH_SHORT).show()
-                                            }
-                                        FirebaseFirestore.getInstance().collection("Reservations").document(it1).set(reservation)
+                                        } else {
 
+                                        }
 
                                     }
                                 }
-                            }else{
 
                             }
-
                         }
+
+
                     }
 
-
-
                 }
-
             }
         }
     }
 
-    private fun checkTimeAvailability(it: Task<DataSnapshot>, duration: Int, dayHours: Day?): Boolean {
-        val newHourStart = startHour.toInt()*100
+    private fun checkTimeAvailability(it: Task<DataSnapshot>, duration: Int, dayHours: Day?, startTime: String, endTime: String): Boolean {
+        val newHourStart = startHour.toInt() * 100
         val newMinuteStart = startMinute.toInt()
 
         var finMin: Int = startMinute.toInt() + duration
         var finHour: Int = startHour.toInt()
 
-        if(finMin >= 60) {
-            finHour += finMin/60
+        if (finMin >= 60) {
+            finHour += finMin / 60
             finMin %= 60
         }
         endMinute = finMin.toString()
         endHour = finHour.toString()
         val newTimeStart = newHourStart + newMinuteStart
-        val newTimeEnd = (finHour*100) + finMin
+        val newTimeEnd = (finHour * 100) + finMin
 
 
         val choosenDate = Calendar.getInstance()
-        choosenDate.set(year.toInt(), month.toInt()-1, day.toInt(),startHour.toInt(),startMinute.toInt())
+        choosenDate.set(year.toInt(), month.toInt() - 1, day.toInt(), startHour.toInt(), startMinute.toInt())
         val currentDate = Calendar.getInstance()
 
-        if(choosenDate.time <= currentDate.time)
-        {
+        if (choosenDate.time <= currentDate.time) {
             Toast.makeText(this, "Prepáčte ale zvolili ste čas v minulosti.", Toast.LENGTH_SHORT)
-                .show()
+                    .show()
             return false
         }
-        else {
-            currentDate.add(3,1)
-            if(choosenDate.time < (currentDate.time))
-            {
-                Toast.makeText(this, "Prepáčte ale rezerváciu musíte vytvoriť minimálne hodinu dopredu.", Toast.LENGTH_SHORT)
-                    .show()
+
+        currentDate.add(Calendar.HOUR,1)
+        if (choosenDate.time < (currentDate.time)) {
+            Toast.makeText(this, "Prepáčte ale rezerváciu musíte vytvoriť minimálne hodinu dopredu.", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (startTime != "null"|| endTime != "null") {
+            val dayStartSplit = startTime.split(':')
+            val dayEndSplit = endTime.split(':')
+            val dayStart = (dayStartSplit.component1().toInt() * 100) + dayStartSplit.component2().toInt()
+            val dayEnd = (dayEndSplit.component1().toInt() * 100) + dayEndSplit.component2().toInt()
+            if (newTimeStart !in dayStart..dayEnd || newTimeEnd !in dayStart..dayEnd) {
+                Toast.makeText(this, "Pokúšate sa vytvoriť rezerváciu v čase keď je prevádzka zatvorená.", Toast.LENGTH_SHORT).show()
                 return false
-
             }
-            else {
-                val dayEndTime = (dayHours!!.endHour!!.toInt() * 100) + dayHours.endMinute!!.toInt()
-                val dayStartTime =
-                    (dayHours!!.startHour!!.toInt() * 100) + dayHours.startMinute!!.toInt()
-                if (newTimeStart < dayStartTime || newTimeEnd > dayEndTime) {
-                    Toast.makeText(
-                        this,
-                        "Pokúšate sa vytvoriť rezerváciu v čase keď je prevádzka zatvorená.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return false
-                } else {
-                    it.result?.children?.forEach {
-                        val reservedHourStart = it.child("startHour").value.toString().toInt() * 100
-                        val reservedMinuteStart = it.child("startMinute").value.toString().toInt()
-                        val reservedHourEnding = it.child("endHour").value.toString().toInt() * 100
-                        val reservedMinuteEnding = it.child("endMinute").value.toString().toInt()
-                        val reservedTimeStart = reservedHourStart + reservedMinuteStart
-                        val reservedTimeEnd = reservedHourEnding + reservedMinuteEnding
 
-                        if (newTimeStart in reservedTimeStart..reservedTimeEnd || newTimeEnd in reservedTimeStart..reservedTimeEnd) {
-                            Toast.makeText(
-                                this,
-                                "Bohužiaľ termín je už zabratý.",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                            return false
-                        }
-                    }
-                    return true
-                }
+        } else {
+            val dayEndTime = (dayHours!!.endHour!!.toInt() * 100) + dayHours.endMinute!!.toInt()
+            val dayStartTime = (dayHours!!.startHour!!.toInt() * 100) + dayHours.startMinute!!.toInt()
+            if (newTimeStart < dayStartTime || newTimeEnd > dayEndTime) {
+                Toast.makeText(this, "Pokúšate sa vytvoriť rezerváciu v čase keď je prevádzka zatvorená.", Toast.LENGTH_SHORT).show()
+                return false
             }
         }
-        return false
+
+
+        it.result?.children?.forEach {
+            val reservedHourStart = it.child("startHour").value.toString().toInt() * 100
+            val reservedMinuteStart = it.child("startMinute").value.toString().toInt()
+            val reservedHourEnding = it.child("endHour").value.toString().toInt() * 100
+            val reservedMinuteEnding = it.child("endMinute").value.toString().toInt()
+            val reservedTimeStart = reservedHourStart + reservedMinuteStart
+            val reservedTimeEnd = reservedHourEnding + reservedMinuteEnding
+
+            if (newTimeStart in reservedTimeStart..reservedTimeEnd || newTimeEnd in reservedTimeStart..reservedTimeEnd) {
+                Toast.makeText(this, "Bohužiaľ termín je už zabratý.", Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }
+        return true
     }
 
 
@@ -295,7 +293,7 @@ class ReservationActivity : AppCompatActivity() {
     }
 
     private  fun saveDate(){
-        val date = choosenDate.text.toString().split(".")
+        val date = this.choosenDate.text.toString().split(".")
         day = date.component1()
         month = date.component2()
         year = date.component3()
@@ -313,13 +311,12 @@ class ReservationActivity : AppCompatActivity() {
 
 
     fun showTimePickerDialog(v: View) {
-        val time = TimePickerFragment().show(supportFragmentManager, "timePicker")
+        TimePickerFragment().show(supportFragmentManager, "timePicker")
 
     }
 
     fun showDatePickerDialog(v: View) {
-        val datePicker = DatePickerFragment()
-        datePicker.show(supportFragmentManager, "datePicker")
+        DatePickerFragment().show(supportFragmentManager, "datePicker")
     }
 
 }
