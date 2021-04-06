@@ -13,7 +13,6 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_messages.*
-import kotlinx.android.synthetic.main.conversation_item.view.*
 import kotlinx.android.synthetic.main.message_from.view.*
 import kotlinx.android.synthetic.main.message_to.view.*
 

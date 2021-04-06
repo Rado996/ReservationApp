@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,18 +8,94 @@
     android:layout_height="match_parent"
     tools:context=".fragments.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".fragments.HomeFragment">
+
+
+    <TextView
+        android:id="@+id/secondDayHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textAlignment="textEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.583"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/secondDayWeek" />
+
+    <TextView
+        android:id="@+id/forthDayHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textAlignment="textEnd"
+        app:layout_constraintStart_toStartOf="@+id/thirdDayHours"
+        app:layout_constraintTop_toBottomOf="@+id/thirdDayHours" />
+
+    <TextView
+        android:id="@+id/fifthDayHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textAlignment="textEnd"
+        app:layout_constraintStart_toStartOf="@+id/forthDayHours"
+        app:layout_constraintTop_toBottomOf="@+id/forthDayHours" />
+
+    <TextView
+        android:id="@+id/sixthDayHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textAlignment="textEnd"
+        app:layout_constraintStart_toStartOf="@+id/fifthDayHours"
+        app:layout_constraintTop_toBottomOf="@+id/fifthDayHours" />
+
+    <TextView
+        android:id="@+id/seventhDayHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textAlignment="textEnd"
+        app:layout_constraintStart_toStartOf="@+id/sixthDayHours"
+        app:layout_constraintTop_toBottomOf="@+id/sixthDayHours" />
+
+    <TextView
+        android:id="@+id/firstDayHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textAlignment="textEnd"
+        app:layout_constraintStart_toStartOf="@+id/seventhDayHours"
+        app:layout_constraintTop_toBottomOf="@+id/seventhDayHours" />
+
+    <TextView
+        android:id="@+id/thirdDayHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textAlignment="textEnd"
+        app:layout_constraintStart_toStartOf="@+id/secondDayHours"
+        app:layout_constraintTop_toBottomOf="@+id/secondDayHours" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_horizontal"
         android:text="informacie"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/homeSpecialOpenHoursRecycler" />
 
     <Button
         android:id="@+id/setOpenTime"
@@ -52,11 +129,84 @@
         tools:layout_editor_absoluteX="125dp"
         android:orientation="vertical">
 
-
-
-
-
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <TextView
+        android:id="@+id/secondDayWeek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/second_day_week"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.322"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/thirdDayWeek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/third_day_week"
+        app:layout_constraintStart_toStartOf="@+id/secondDayWeek"
+        app:layout_constraintTop_toBottomOf="@+id/secondDayWeek" />
+
+    <TextView
+        android:id="@+id/forthDayWeek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/fourth_day_week"
+        app:layout_constraintStart_toStartOf="@+id/thirdDayWeek"
+        app:layout_constraintTop_toBottomOf="@+id/thirdDayWeek" />
+
+    <TextView
+        android:id="@+id/fifthDayWeek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/fifth_day_week"
+        app:layout_constraintStart_toStartOf="@+id/forthDayWeek"
+        app:layout_constraintTop_toBottomOf="@+id/forthDayWeek" />
+
+    <TextView
+        android:id="@+id/sixthDayWeek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/sixth_day_week"
+        app:layout_constraintStart_toStartOf="@+id/fifthDayWeek"
+        app:layout_constraintTop_toBottomOf="@+id/fifthDayWeek" />
+
+    <TextView
+        android:id="@+id/seventhDayWeek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/seventh_day_week"
+        app:layout_constraintStart_toStartOf="@+id/sixthDayWeek"
+        app:layout_constraintTop_toBottomOf="@+id/sixthDayWeek" />
+
+    <TextView
+        android:id="@+id/firstDayWeek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/first_day_week"
+        app:layout_constraintStart_toStartOf="@+id/seventhDayWeek"
+        app:layout_constraintTop_toBottomOf="@+id/seventhDayWeek" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/homeSpecialOpenHoursRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+
+
+        app:layout_constraintTop_toBottomOf="@+id/firstDayWeek"
+        tools:layout_editor_absoluteX="0dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

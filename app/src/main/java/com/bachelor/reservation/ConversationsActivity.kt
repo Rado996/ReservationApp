@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bachelor.reservation.classes.Conversation
 import com.bachelor.reservation.classes.UserConversation
 import com.bachelor.reservationapp.R
 import com.google.firebase.auth.FirebaseAuth

@@ -64,26 +64,77 @@ class SetOpenHours : AppCompatActivity() {
         FirebaseDatabase.getInstance().getReference("OpenHours").get().addOnCompleteListener {
             if(it.isSuccessful){
                 var day = it.result?.child("2")?.getValue(Day::class.java)
-                secondStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                secondEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                if(day?.startMinute == "") {
+                    secondStartTime.setText(day?.startHour)
+                } else if(day?.endMinute == ""){
+                    secondEndTime.setText(day?.endHour)
+                }  else {
+                    secondStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                    secondEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                }
                 day = it.result?.child("3")?.getValue(Day::class.java)
-                thirdStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                thirdEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                if(day?.startMinute == "") {
+                    thirdStartTime.setText(day?.startHour)
+                } else if(day?.endMinute == ""){
+                    thirdEndTime.setText(day?.endHour)
+                }  else {
+                    thirdStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                    thirdEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                }
+
                 day = it.result?.child("4")?.getValue(Day::class.java)
-                forthStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                forthEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                if(day?.startMinute == "") {
+                    forthStartTime.setText(day?.startHour)
+                } else if(day?.endMinute == ""){
+                    forthEndTime.setText(day?.endHour)
+                }  else {
+                    forthStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                    forthEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                }
+
                 day = it.result?.child("5")?.getValue(Day::class.java)
-                fifthStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                fifthEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                if(day?.startMinute == "") {
+                    fifthStartTime.setText(day?.startHour)
+                } else if(day?.endMinute == ""){
+                    fifthEndTime.setText(day?.endHour)
+                }  else {
+                    fifthStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                    fifthEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                }
+
+
                 day = it.result?.child("6")?.getValue(Day::class.java)
-                sixthStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                sixthEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                if(day?.startMinute == "") {
+                    sixthStartTime.setText(day?.startHour)
+                } else if(day?.endMinute == ""){
+                    sixthEndTime.setText(day?.endHour)
+                }  else {
+                    sixthStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                    sixthEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                }
+
+
                 day = it.result?.child("7")?.getValue(Day::class.java)
-                seventhStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                seventhEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                if(day?.startMinute == "") {
+                    seventhStartTime.setText(day?.startHour)
+                } else if(day?.endMinute == ""){
+                    seventhEndTime.setText(day?.endHour)
+                }  else {
+                    seventhStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                    seventhEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                }
+
+
                 day = it.result?.child("1")?.getValue(Day::class.java)
-                firstStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                firstEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                if(day?.startMinute == "") {
+                    firstStartTime.setText(day?.startHour)
+                } else if(day?.endMinute == ""){
+                    firstEndTime.setText(day?.endHour)
+                }  else {
+                    firstStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                    firstEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+                }
+
 
             }
 
@@ -139,10 +190,7 @@ class SetOpenHours : AppCompatActivity() {
         val startTime = specialStartTime.text.toString()
         var endTime = specialEndTime.text.toString()
 
-        if(date.isNullOrBlank() || startTime.isNullOrBlank() || endTime.isNullOrBlank()){
-            Toast.makeText(this, "Nevyplnili ste udaje.", Toast.LENGTH_SHORT).show()
-        }
-        else{
+        if(!date.isNullOrBlank() && (!startTime.isNullOrBlank() || !endTime.isNullOrBlank())){
             val splitDate = date.split('.')
             val cdate = splitDate.component1().toString().plus(",").plus(splitDate.component2().toString()).plus(",").plus(splitDate.component3().toString())
             val hours = mutableMapOf<String, String>()
@@ -151,77 +199,124 @@ class SetOpenHours : AppCompatActivity() {
             FirebaseDatabase.getInstance().getReference("SpecialOpenHours/${cdate}").setValue(hours)
 
         }
+        else{
+            Toast.makeText(this, "Nevyplnili ste udaje.", Toast.LENGTH_SHORT).show()
+
+        }
     }
 
     private fun saveOpenTime() {
+
         var startTime = secondStartTime.text.toString().split(":")
         var endTime = secondEndTime.text.toString().split(":")
-        var startHour = startTime.component1().toString()
-        var startMin = startTime.component2().toString()
-        var endHour = endTime.component1().toString()
-        var endMin = endTime.component2().toString()
+        var startHour = ""
+        var endHour = ""
+        var startMin = ""
+        var endMin = ""
+
+        if(secondStartTime.text.toString().contains(':') && secondEndTime.text.toString().contains(':') ){
+            startHour = startTime.component1().toString()
+            startMin = startTime.component2().toString()
+            endHour = endTime.component1().toString()
+            endMin = endTime.component2().toString()
+        }else{
+            startHour = secondStartTime.text.toString()
+            endHour = secondEndTime.text.toString()
+            startMin = ""
+            endMin = ""
+        }
 
         var day = Day("2", startHour, startMin, endHour, endMin)
 
         val days= mutableListOf<Day>()
         days.add(day)
 
-        startTime = thirdStartTime.text.toString().split(":")
-        endTime = thirdEndTime.text.toString().split(":")
-        startHour = startTime.component1().toString()
-        startMin = startTime.component2().toString()
-        endHour = endTime.component1().toString()
-        endMin = endTime.component2().toString()
+        if(thirdStartTime.text.toString().contains(':') && thirdEndTime.text.toString().contains(':') ){
+            startHour = startTime.component1().toString()
+            startMin = startTime.component2().toString()
+            endHour = endTime.component1().toString()
+            endMin = endTime.component2().toString()
+        }else{
+            startHour = thirdStartTime.text.toString()
+            endHour = thirdEndTime.text.toString()
+            startMin = ""
+            endMin = ""
+        }
 
         day = Day("3", startHour, startMin, endHour, endMin)
         days.add(day)
 
-        startTime = forthStartTime.text.toString().split(":")
-        endTime = forthEndTime.text.toString().split(":")
-        startHour = startTime.component1().toString()
-        startMin = startTime.component2().toString()
-        endHour = endTime.component1().toString()
-        endMin = endTime.component2().toString()
+        if(forthStartTime.text.toString().contains(':') && forthEndTime.text.toString().contains(':') ){
+            startHour = startTime.component1().toString()
+            startMin = startTime.component2().toString()
+            endHour = endTime.component1().toString()
+            endMin = endTime.component2().toString()
+        }else{
+            startHour = forthStartTime.text.toString()
+            endHour = forthEndTime.text.toString()
+            startMin = ""
+            endMin = ""
+        }
 
         day = Day("4", startHour, startMin, endHour, endMin)
         days.add(day)
 
-        startTime = firstStartTime.text.toString().split(":")
-        endTime = fifthEndTime.text.toString().split(":")
-        startHour = startTime.component1().toString()
-        startMin = startTime.component2().toString()
-        endHour = endTime.component1().toString()
-        endMin = endTime.component2().toString()
+        if(fifthStartTime.text.toString().contains(':') && fifthEndTime.text.toString().contains(':') ){
+            startHour = startTime.component1().toString()
+            startMin = startTime.component2().toString()
+            endHour = endTime.component1().toString()
+            endMin = endTime.component2().toString()
+        }else{
+            startHour = fifthStartTime.text.toString()
+            endHour = fifthEndTime.text.toString()
+            startMin = ""
+            endMin = ""
+        }
 
         day = Day("5", startHour, startMin, endHour, endMin)
         days.add(day)
 
-        startTime = sixthStartTime.text.toString().split(":")
-        endTime = sixthEndTime.text.toString().split(":")
-        startHour = startTime.component1().toString()
-        startMin = startTime.component2().toString()
-        endHour = endTime.component1().toString()
-        endMin = endTime.component2().toString()
+        if(sixthStartTime.text.toString().contains(':') && sixthEndTime.text.toString().contains(':') ){
+            startHour = startTime.component1().toString()
+            startMin = startTime.component2().toString()
+            endHour = endTime.component1().toString()
+            endMin = endTime.component2().toString()
+        }else{
+            startHour = sixthStartTime.text.toString()
+            endHour = sixthEndTime.text.toString()
+            startMin = ""
+            endMin = ""
+        }
 
         day = Day("6", startHour, startMin, endHour, endMin)
         days.add(day)
 
-        startTime = seventhStartTime.text.toString().split(":")
-        endTime = seventhEndTime.text.toString().split(":")
-        startHour = startTime.component1().toString()
-        startMin = startTime.component2().toString()
-        endHour = endTime.component1().toString()
-        endMin = endTime.component2().toString()
+        if(seventhStartTime.text.toString().contains(':') && seventhEndTime.text.toString().contains(':') ){
+            startHour = startTime.component1().toString()
+            startMin = startTime.component2().toString()
+            endHour = endTime.component1().toString()
+            endMin = endTime.component2().toString()
+        }else{
+            startHour = seventhStartTime.text.toString()
+            endHour = seventhEndTime.text.toString()
+            startMin = ""
+            endMin = ""
+        }
 
         day = Day("7", startHour, startMin, endHour, endMin)
         days.add(day)
 
-        startTime = firstStartTime.text.toString().split(":")
-        endTime = firstEndTime.text.toString().split(":")
-        startHour = startTime.component1().toString()
-        startMin = startTime.component2().toString()
-        endHour = endTime.component1().toString()
-        endMin = endTime.component2().toString()
+        if(firstStartTime.text.toString().contains(':') && firstEndTime.text.toString().contains(':') ){
+            startHour = startTime.component1().toString()
+            startMin = startTime.component2().toString()
+            endHour = endTime.component1().toString()
+            endMin = endTime.component2().toString()
+        }else{
+            startHour = firstStartTime.text.toString()
+            endHour = firstEndTime.text.toString()
+            startMin = ""
+            endMin = ""
+        }
 
         day = Day("1", startHour, startMin, endHour, endMin)
         days.add(day)
@@ -229,23 +324,11 @@ class SetOpenHours : AppCompatActivity() {
         days.forEach {
             FirebaseDatabase.getInstance().getReference("OpenHours/${it.ID}").setValue(it)
         }
-
-
-
-
     }
-
-
-
 
     fun showDatePickerDialog(v: View) {
         DatePickerFragment().show(supportFragmentManager, "datePicker")
     }
-
-
-
-
-
 }
 
 

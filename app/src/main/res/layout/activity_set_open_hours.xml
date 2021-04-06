@@ -15,30 +15,29 @@
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#DCDCDC"
 >
 
 
     <EditText
         android:id="@+id/secondEndTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="48dp"
-        android:ems="10"
-        android:inputType="time"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/secondDay" />
 
     <EditText
         android:id="@+id/secondStartTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="40dp"
-        android:ems="10"
-        android:inputType="time"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toStartOf="@+id/secondEndTime"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/secondDay" />
 
 
     <TextView
@@ -46,7 +45,7 @@
         android:layout_width="78dp"
         android:layout_height="39dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,25 +53,23 @@
 
     <EditText
         android:id="@+id/thirdStartTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="40dp"
-        android:ems="10"
-        android:inputType="time"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toStartOf="@+id/thirdEndTime"
-        app:layout_constraintTop_toBottomOf="@+id/secondStartTime" />
+        app:layout_constraintTop_toTopOf="@+id/thirdDay" />
 
     <EditText
         android:id="@+id/thirdEndTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="48dp"
-        android:ems="10"
-        android:inputType="time"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/secondEndTime" />
+        app:layout_constraintTop_toTopOf="@+id/thirdDay" />
 
 
     <TextView
@@ -80,7 +77,7 @@
         android:layout_width="78dp"
         android:layout_height="39dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,34 +85,31 @@
 
     <EditText
         android:id="@+id/forthStartTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="40dp"
-        android:ems="10"
-        android:inputType="time"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toStartOf="@+id/forthEndTime"
-        app:layout_constraintTop_toBottomOf="@+id/thirdStartTime" />
-
+        app:layout_constraintTop_toTopOf="@+id/forthDay" />
 
 
     <EditText
         android:id="@+id/forthEndTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="48dp"
-        android:ems="10"
-        android:inputType="time"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/thirdStartTime" />
+        app:layout_constraintTop_toTopOf="@+id/forthDay" />
 
     <TextView
         android:id="@+id/forthDay"
         android:layout_width="78dp"
         android:layout_height="39dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -123,35 +117,30 @@
 
     <EditText
         android:id="@+id/fifthStartTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="40dp"
-        android:ems="10"
-        android:inputType="time"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toStartOf="@+id/fifthEndTime"
-        app:layout_constraintTop_toBottomOf="@+id/forthStartTime" />
-
-
+        app:layout_constraintTop_toTopOf="@+id/fifthDay" />
 
     <EditText
         android:id="@+id/fifthEndTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="48dp"
-        android:ems="10"
-        android:inputType="time"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/forthStartTime" />
-
+        app:layout_constraintTop_toTopOf="@+id/fifthDay" />
 
     <TextView
         android:id="@+id/fifthDay"
         android:layout_width="78dp"
         android:layout_height="39dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -159,33 +148,31 @@
 
     <EditText
         android:id="@+id/sixthStartTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="40dp"
-        android:ems="10"
-        android:inputType="time"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toStartOf="@+id/sixthEndTime"
-        app:layout_constraintTop_toBottomOf="@+id/fifthStartTime" />
+        app:layout_constraintTop_toTopOf="@+id/sixthDay" />
 
 
     <EditText
         android:id="@+id/sixthEndTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="48dp"
-        android:ems="10"
-        android:inputType="time"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fifthStartTime" />
+        app:layout_constraintTop_toTopOf="@+id/sixthDay" />
 
     <TextView
         android:id="@+id/sixthDay"
         android:layout_width="78dp"
         android:layout_height="39dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -193,67 +180,67 @@
 
     <EditText
         android:id="@+id/seventhStartTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="40dp"
-        android:ems="10"
-        android:inputType="time"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toStartOf="@+id/seventhEndTime"
-        app:layout_constraintTop_toBottomOf="@+id/sixthStartTime" />
+        app:layout_constraintTop_toTopOf="@+id/seventhDay" />
 
 
     <EditText
         android:id="@+id/seventhEndTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="48dp"
-        android:ems="10"
-        android:inputType="time"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sixthStartTime" />
+        app:layout_constraintTop_toTopOf="@+id/seventhDay" />
 
     <TextView
         android:id="@+id/seventhDay"
         android:layout_width="78dp"
         android:layout_height="39dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sixthDay" />
 
+
     <EditText
         android:id="@+id/firstStartTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="40dp"
-        android:ems="10"
-        android:inputType="time"
+        android:background="#FFFFFF"
+        android:padding="5dp"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toStartOf="@+id/firstEndTime"
-        app:layout_constraintTop_toBottomOf="@+id/seventhStartTime" />
-
+        app:layout_constraintTop_toTopOf="@+id/firstDay" />
 
     <EditText
         android:id="@+id/firstEndTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="48dp"
-        android:ems="10"
-        android:inputType="time"
+        android:background="#FFFFFF"
+        android:padding="5dp"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seventhStartTime" />
+        app:layout_constraintTop_toTopOf="@+id/firstDay" />
 
     <TextView
         android:id="@+id/firstDay"
         android:layout_width="78dp"
         android:layout_height="39dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -265,7 +252,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="36dp"
         android:layout_marginTop="20dp"
-        android:text="Save"
+        android:text="@string/save_open_hours"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/firstEndTime" />
 
@@ -274,33 +261,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="12dp"
+        android:onClick="showDatePickerDialog"
+        android:text="Vybrať dátum."
         android:textSize="20sp"
         android:textStyle="bold"
-        android:text="Vybrať dátum."
-        android:onClick="showDatePickerDialog"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstDay" />
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <EditText
         android:id="@+id/specialStartTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
-        android:ems="10"
-        android:inputType="time"
+
+        android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/choosenDate" />
 
     <EditText
         android:id="@+id/specialEndTime"
-        android:layout_width="78dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="40dp"
+        android:minWidth="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:ems="10"
-        android:inputType="time"
+        android:inputType="text"
         app:layout_constraintStart_toEndOf="@+id/specialStartTime"
         app:layout_constraintTop_toBottomOf="@+id/choosenDate" />
 
@@ -323,6 +311,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
+
+    <TextView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/special_date_hours"
+        android:textAlignment="center"
+        android:background="#DCDCDC"
+        app:layout_constraintTop_toBottomOf="@+id/saveTimes"
+        tools:layout_editor_absoluteX="167dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

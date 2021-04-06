@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ReservationApp</string>
+    <string name="app_name">MimiNails</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -58,6 +58,15 @@
     <string name="User">Meno</string>
     <string name="create_new_reservation">Vytvoriť rezerváciu</string>
     <string name="send_message_toUser">Poslať správu</string>
+    <string name="first_day_week">Nedeľa</string>
+    <string name="seventh_day_week">Sobota</string>
+    <string name="sixth_day_week">Piatok</string>
+    <string name="fifth_day_week">Štvrtok</string>
+    <string name="fourth_day_week">Streda</string>
+    <string name="third_day_week">Utorok</string>
+    <string name="second_day_week">Pondelok</string>
+    <string name="special_date_hours">Špeciálne otváracie hodiny:</string>
+    <string name="save_open_hours">Uložiť otváracie hodiny</string>
 
 
 </resources>
