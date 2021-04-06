@@ -25,6 +25,12 @@ class ReservationDetailActivity : AppCompatActivity() {
         resDetailUserNote.text = reservation.userNote
 
         resDetailUserName.text = user.userName
+        resDetailUserName.setOnClickListener {
+            val intent = Intent(it.context,UserProfileActivity::class.java)
+            intent.putExtra("User", user)
+            it.context.startActivity(intent)
+        }
+
         resDetailUserPhone.text = user.userPhone
         resDetailSendMessage.setOnClickListener {view->
             FirebaseDatabase.getInstance().getReference("Conversations").child(user.uid.toString()).get().addOnCompleteListener {

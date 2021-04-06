@@ -6,10 +6,12 @@ import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bachelor.reservation.classes.Reservation
 import com.bachelor.reservationapp.R
+import com.bachelor.reservationapp.classes.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -20,15 +22,23 @@ import kotlinx.android.synthetic.main.message_to.view.*
 import kotlinx.android.synthetic.main.reservation_profileitem.view.*
 
 class UserProfileActivity : AppCompatActivity() {
+    lateinit var user: User
+    lateinit var query: Query
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
+        val res = FirebaseFirestore.getInstance().collection("Reservations")
+
+        if(intent.hasExtra("User")){
+            user = intent.getParcelableExtra("User")
+            query = res.whereEqualTo("userID",user.uid)
+        }else{
+            query = res.whereEqualTo("userID",FirebaseAuth.getInstance().uid)
+        }
 
         loadUserData()
-
-        val res = FirebaseFirestore.getInstance().collection("Reservations")
-        val query = res.whereEqualTo("userID",FirebaseAuth.getInstance().uid)
 
         val adapter = GroupAdapter<GroupieViewHolder>()
         query.get().addOnCompleteListener{ document->
@@ -61,17 +71,16 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun loadUserData() {
-        val user = FirebaseAuth.getInstance().currentUser
+        var user = FirebaseAuth.getInstance().currentUser
+        if(intent.hasExtra("User"))
+            user = intent.getParcelableExtra("User")
+
 
         FirebaseDatabase.getInstance().getReference("Users").child(user.uid).get()
                 .addOnCompleteListener { task ->
                     if (!task.isSuccessful) {
                         Log.e("firebase", "Error getting data", task.exception)
                     } else {
-                        Log.d("firebaseresult", task.result!!.key) //userID
-                        Log.d("firebasevalue", task.result!!.value.toString() ) //array dat usera
-                        Log.d("firebasechilduser",task.result!!.child("userName").value.toString()) //data userName
-
                         displayUserData(task.result!!)
 
                     }

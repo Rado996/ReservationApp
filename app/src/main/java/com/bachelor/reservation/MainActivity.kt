@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         bar.showOverflowMenu()
         setupTabs()
 
+        setupData()
 
         showMessages.setOnClickListener {
             val intent= Intent(this@MainActivity, ConversationsActivity::class.java)
@@ -108,7 +109,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
+    private fun setupData() {
+        FirebaseDatabase.getInstance().getReference("Admin").get().addOnCompleteListener {
+            if (it.isSuccessful){
+                val sharedPref = getSharedPreferences("Data", MODE_PRIVATE)
+                val editor = sharedPref.edit()
+                editor.putString("AdminID", it.result!!.value.toString())
+                editor.apply()
+            }
+        }
+    }
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
