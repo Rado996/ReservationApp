@@ -149,8 +149,7 @@ class ReservationActivity : AppCompatActivity() {
                                         val sharedPref = getSharedPreferences("Data", MODE_PRIVATE)
                                         val adminID: String? = sharedPref.getString("AdminID", "Error")
 
-                                        val available: Boolean = checkTimeAvailability(reservations, duration, dayHours,startTime, endTime)
-                                        if (available || FirebaseAuth.getInstance().uid == adminID) {
+                                        if (FirebaseAuth.getInstance().uid == adminID || checkTimeAvailability(reservations, duration, dayHours,startTime, endTime)) {
                                             if (intent.hasExtra("Reservation")) {
                                                 val oldRes = intent.getParcelableExtra<Reservation>("Reservation")
                                                 if (oldRes.day == day && oldRes.month == month && oldRes.year == year) {
@@ -203,7 +202,7 @@ class ReservationActivity : AppCompatActivity() {
         val newHourStart = startHour.toInt() * 100
         val newMinuteStart = startMinute.toInt()
 
-        var finMin: Int = startMinute.toInt() + duration
+        var finMin: Int = newMinuteStart + duration
         var finHour: Int = startHour.toInt()
 
         if (finMin >= 60) {
@@ -217,7 +216,7 @@ class ReservationActivity : AppCompatActivity() {
 
 
         val choosenDate = Calendar.getInstance()
-        choosenDate.set(year.toInt(), month.toInt() - 1, day.toInt(), startHour.toInt(), startMinute.toInt())
+        choosenDate.set(year.toInt(), month.toInt() - 1, day.toInt(), newHourStart, newMinuteStart)
         val currentDate = Calendar.getInstance()
 
         if (choosenDate.time <= currentDate.time) {
@@ -250,8 +249,19 @@ class ReservationActivity : AppCompatActivity() {
 
         } else {
 
-                Toast.makeText(this, "Nastala chyba, nie je možne overiť dostupnosť termínu.", Toast.LENGTH_SHORT).show()
-                return false
+                if(dayHours?.startMinute?.isBlank()!! ||dayHours?.endMinute?.isBlank()!!) {
+                    Toast.makeText(this, "Nie je možné vytvoriť rezerváciu na daný termín, prosím, kontaktujte náš salón.", Toast.LENGTH_SHORT).show()
+                    return false
+
+
+                }else{
+                    val dayStart = (dayHours.startHour?.toInt()!! * 100) + dayHours.startMinute.toInt()
+                    val dayEnd = (dayHours.endHour?.toInt()!! *100) + dayHours.endMinute.toInt()
+                    if (newTimeStart !in dayStart..dayEnd || newTimeEnd !in dayStart..dayEnd) {
+                        Toast.makeText(this, "Pokúšate sa vytvoriť rezerváciu v čase keď je prevádzka zatvorená.", Toast.LENGTH_SHORT).show()
+                        return false
+                    }
+                }
 
         }
 
