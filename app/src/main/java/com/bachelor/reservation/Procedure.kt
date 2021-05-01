@@ -12,12 +12,17 @@ class Procedure: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_procedure)
 
+        val bar: androidx.appcompat.widget.Toolbar = findViewById(R.id.my_toolbar)
+        setSupportActionBar(bar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val service :Service = intent.getParcelableExtra("Service")
         serviceDetailTitle.text = service.title
-        serviceDetailDescription.text = service.title
+        serviceDetailDescription.text = service.description
         serviceDetailDuration.text = service.duration
         //serviceDetailPicture.setImageURI()
         Glide.with(scrollView2).load(service.pictureLink).into(serviceDetailPicture)
+
 
     }
 }

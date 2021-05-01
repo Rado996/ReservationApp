@@ -41,11 +41,16 @@ class ReservationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservation)
 
+        val bar: androidx.appcompat.widget.Toolbar = findViewById(R.id.my_toolbar)
+        setSupportActionBar(bar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //bar.showOverflowMenu()
+
         if(intent.hasExtra("Reservation")){
             setData(intent.getParcelableExtra<Reservation>("Reservation"))
         }
 
-        service.setText("Zvoľte službu.")
+//        chooosenService.setText("Zvoľte službu.")
 
         dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setTitle("Vyberte službu.")
@@ -56,7 +61,7 @@ class ReservationActivity : AppCompatActivity() {
             submitReservation()
         }
 
-        service.setOnClickListener {
+        picsServices.setOnClickListener {
             showServicePickerDialog()
         }
 
@@ -90,7 +95,7 @@ class ReservationActivity : AppCompatActivity() {
                                 Services += ","
                         }
                     }
-                    service.setText(Services)
+                    chooosenService.setText(Services)
                 })
                 dialogBuilder.setNegativeButton("Zruš", null)
 
@@ -110,13 +115,13 @@ class ReservationActivity : AppCompatActivity() {
 
         choosenDate.text = day.plus(".").plus(month).plus(".").plus(year)
         choosenTime.text = hour.plus(":").plus(minute)
-        service.setText(reservation.service)
+        chooosenService.setText(reservation.service)
         userNote.setText(reservation.userNote)
     }
 
     private fun submitReservation() {
         val userID = FirebaseAuth.getInstance().uid
-        val service = service.text.toString()
+        val service = chooosenService.text.toString()
         val note = userNote.text.toString()
         if(userID.isNullOrBlank()){
             Toast.makeText(this@ReservationActivity, "Pred vytvorením rezervácie sa musíte prihlásiť.", Toast.LENGTH_SHORT).show()
@@ -265,18 +270,24 @@ class ReservationActivity : AppCompatActivity() {
 
         }
 
+        lateinit var oldRes:Reservation
+        if (intent.hasExtra("Reservation")) {
+            oldRes = intent.getParcelableExtra<Reservation>("Reservation")
 
+        }
         it.result?.children?.forEach {
-            val reservedHourStart = it.child("startHour").value.toString().toInt() * 100
-            val reservedMinuteStart = it.child("startMinute").value.toString().toInt()
-            val reservedHourEnding = it.child("endHour").value.toString().toInt() * 100
-            val reservedMinuteEnding = it.child("endMinute").value.toString().toInt()
-            val reservedTimeStart = reservedHourStart + reservedMinuteStart
-            val reservedTimeEnd = reservedHourEnding + reservedMinuteEnding
+            if(oldRes.reservationID != it.child("reservationID").value.toString()) {
+                val reservedHourStart = it.child("startHour").value.toString().toInt() * 100
+                val reservedMinuteStart = it.child("startMinute").value.toString().toInt()
+                val reservedHourEnding = it.child("endHour").value.toString().toInt() * 100
+                val reservedMinuteEnding = it.child("endMinute").value.toString().toInt()
+                val reservedTimeStart = reservedHourStart + reservedMinuteStart
+                val reservedTimeEnd = reservedHourEnding + reservedMinuteEnding
 
-            if (newTimeStart in reservedTimeStart..reservedTimeEnd || newTimeEnd in reservedTimeStart..reservedTimeEnd) {
-                Toast.makeText(this, "Bohužiaľ termín je už zabratý.", Toast.LENGTH_SHORT).show()
-                return false
+                if (newTimeStart in reservedTimeStart..reservedTimeEnd || newTimeEnd in reservedTimeStart..reservedTimeEnd) {
+                    Toast.makeText(this, "Bohužiaľ termín je už zabratý.", Toast.LENGTH_SHORT).show()
+                    return false
+                }
             }
         }
         return true

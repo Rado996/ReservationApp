@@ -29,6 +29,10 @@ class UserProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
+        val bar: androidx.appcompat.widget.Toolbar = findViewById(R.id.my_toolbar)
+        setSupportActionBar(bar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val res = FirebaseFirestore.getInstance().collection("Reservations")
 
         if(intent.hasExtra("User")){
@@ -60,45 +64,44 @@ class UserProfileActivity : AppCompatActivity() {
                                                         data["confirmed"] as Boolean?,
                                                         data["finished"] as Boolean?,
                                                         data["adminNote"].toString())
-                    adapter.add(reservationsViewHolder(reservation))
+                    adapter.add(userReservationsViewHolder(reservation))
                 }
                 userReservationsHistory.adapter = adapter
                 userReservationsHistory.layoutManager = LinearLayoutManager(applicationContext)
             }
         }
-
-
     }
 
     private fun loadUserData() {
-        var user = FirebaseAuth.getInstance().currentUser
-        if(intent.hasExtra("User"))
-            user = intent.getParcelableExtra("User")
 
+        if(intent.hasExtra("User")) {
+            displayUserData(user)
 
-        FirebaseDatabase.getInstance().getReference("Users").child(user.uid).get()
+        }else {
+            FirebaseDatabase.getInstance().getReference("Users").child(user.uid.toString()).get()
                 .addOnCompleteListener { task ->
                     if (!task.isSuccessful) {
                         Log.e("firebase", "Error getting data", task.exception)
                     } else {
-                        displayUserData(task.result!!)
+
+                        displayUserData(task.result!!.getValue(User::class.java)!!)
 
                     }
                 }
+        }
     }
 
-    private fun displayUserData(user: DataSnapshot) {
-        UPEmail.text = user.child("userEmail").value.toString()
-        UPName.text = user.child("userName").value.toString()
-        UPSecondName.text = user.child("userSecondName").value.toString()
-        UPPhoneNumber.text = user.child("userPhone").value.toString()
+    private fun displayUserData(user: User) {
+        UPEmail.text = user.userEmail
+        UPName.text = user.userName.plus(" ").plus(user.userSecondName)
+        UPPhoneNumber.text = user.userPhone
 
     }
 
 }
 
 
-class reservationsViewHolder(val reservation: Reservation): Item<GroupieViewHolder>(){
+class userReservationsViewHolder(val reservation: Reservation): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val date = reservation.day.plus(".").plus(reservation.month.toString()).plus(".").plus(reservation.year.toString())
         viewHolder.itemView.profileReserationDate.text = date

@@ -47,8 +47,7 @@ class UserDetailActivity : AppCompatActivity() {
 
     private fun displayUserData(user: DataSnapshot) {
         UPEmail.text = user.child("userEmail").value.toString()
-        UPName.text = user.child("userName").value.toString()
-        UPSecondName.text = user.child("userSecondName").value.toString()
+        UPName.text = user.child("userName").value.toString().plus(user.child("userSecondName").value.toString())
         UPPhoneNumber.text = user.child("userPhone").value.toString()
 
     }

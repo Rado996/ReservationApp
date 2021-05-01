@@ -2,30 +2,17 @@ package com.bachelor.reservationapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.CalendarView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.get
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bachelor.reservation.ConversationsActivity
 import com.bachelor.reservation.LoginActivity
-import com.bachelor.reservation.ReservationActivity
 import com.bachelor.reservation.UserProfileActivity
-import com.bachelor.reservation.adapters.pictureAdapter
-import com.bachelor.reservation.adapters.reservationAdapter
-import com.bachelor.reservation.classes.Reservation
 import com.bachelor.reservation.fragments.LocationFragment
 import com.bachelor.reservationapp.adapters.ViewPagerAdapter
-import com.bachelor.reservationapp.classes.Picture
 import com.bachelor.reservationapp.fragments.CalendarFragment
 import com.bachelor.reservationapp.fragments.GalleryFragment
 import com.bachelor.reservationapp.fragments.HomeFragment
@@ -37,11 +24,6 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.android.synthetic.main.fragment_gallery.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.lang.Exception
 import java.util.*
 
 
@@ -142,7 +124,7 @@ class MainActivity : AppCompatActivity() {
 
         tabs.getTabAt(0)!!.setIcon(R.drawable.ic_baseline_home_24)
         tabs.getTabAt(1)!!.setIcon(R.drawable.ic_baseline_photo_24)
-        tabs.getTabAt(2)!!.setIcon(R.drawable.ic_baseline_calendar_today_24)
+        tabs.getTabAt(2)!!.setIcon(R.drawable.ic_baseline_date_range_24)
         tabs.getTabAt(3)!!.setIcon(R.drawable.ic_baseline_location_on_24)
         tabs.getTabAt(4)!!.setIcon(R.drawable.ic_baseline_star_rate_24)
 

@@ -43,7 +43,7 @@ class RegisterActivity : AppCompatActivity() {
                     ).show()
                     val user = mAuth!!.currentUser
 
-                    val myUser = User(user.uid, userName, userSecondName, userEmail, userPhone)
+                    val myUser = User(user.uid, userName, userSecondName, userPhone, userEmail)
                     FirebaseDatabase.getInstance().getReference("Users")
                         .child(FirebaseAuth.getInstance().currentUser.uid)
                         .setValue(myUser).addOnCompleteListener { task ->

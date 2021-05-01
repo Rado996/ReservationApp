@@ -9,15 +9,10 @@ import android.view.ViewGroup
 import android.widget.CalendarView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bachelor.reservation.MessageToViewHolder
-import com.bachelor.reservation.Procedure
 import com.bachelor.reservation.ReservationActivity
 import com.bachelor.reservation.ReservationDetailActivity
-import com.bachelor.reservation.adapters.reservationAdapter
 import com.bachelor.reservation.classes.Reservation
-import com.bachelor.reservation.classes.Service
 import com.bachelor.reservationapp.R
 import com.bachelor.reservationapp.classes.User
 import com.google.firebase.auth.FirebaseAuth

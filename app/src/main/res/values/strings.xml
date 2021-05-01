@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MimiNails</string>
+    <string name="app_name">SkinForm</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -54,9 +54,9 @@
 
     <string name="preference_file_key">SharedData</string>
     <string name="review_text_hint">Napíšte recenziu</string>
-    <string name="review_submit">Pošli</string>
+    <string name="review_submit">Uverejni recenziu</string>
     <string name="User">Meno</string>
-    <string name="create_new_reservation">Vytvoriť rezerváciu</string>
+    <string name="create_new_reservation">Rezervovať termín</string>
     <string name="send_message_toUser">Poslať správu</string>
     <string name="first_day_week">Nedeľa</string>
     <string name="seventh_day_week">Sobota</string>
@@ -67,6 +67,22 @@
     <string name="second_day_week">Pondelok</string>
     <string name="special_date_hours">Špeciálne otváracie hodiny:</string>
     <string name="save_open_hours">Uložiť otváracie hodiny</string>
+    <string name="services">Ponúkané kozmetické služby</string>
+    <string name="openHoursInfo">Otváracie hodiny</string>
+    <string name="reservations_info">Rezervácie</string>
+    <string name="hodnoteniaTitle">Recenzie</string>
+    <string name="choosen_date">7.12.1999</string>
+    <string name="choosen_time">05:22</string>
+    <string name="choose_services">žiadne služby</string>
+    <string name="note_u">Poznámka</string>
+    <string name="date_note">Dátum</string>
+    <string name="time_note">Čas</string>
+    <string name="services_note">Služby</string>
+    <string name="submit_res">Vytvoriť rezervaciu</string>
+    <string name="pick_services">Vybrať</string>
+    <string name="pick_time">Vybrať</string>
+    <string name="pick_date">Vybrať</string>
+    <string name="time_expecting">Trvanie procedúry:</string>
 
 
 </resources>

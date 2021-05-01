@@ -14,34 +14,53 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
             <Button
                 android:id="@+id/createReservationBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:backgroundTintMode="screen"
+                android:drawableLeft="@drawable/ic_baseline_event_60"
                 android:text="@string/create_new_reservation"
+                android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.905"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/calendarViewReservations" />
 
             <CalendarView
                 android:id="@+id/calendarViewReservations"
                 android:layout_width="wrap_content"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.491"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/createReservationBtn" />
-
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewReservationItems"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/calendarViewReservations"
+                app:layout_constraintTop_toBottomOf="@+id/textView7"
+                app:layout_constraintVertical_bias="1.0"
+                tools:layout_editor_absoluteX="0dp"
                 tools:listitem="@layout/reservation_item">
 
             </androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/allura"
+                android:text="@string/reservations_info"
+                android:textColor="@color/purple_500"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/createReservationBtn" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

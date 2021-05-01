@@ -1,3 +1,3 @@
 package com.bachelor.reservation.classes
 
-class Review(val authorID: String, val authorName: String, val text: String)
+class Review(val authorID: String? = null, val authorName: String? = null, val text: String? = null)

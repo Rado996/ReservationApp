@@ -12,28 +12,35 @@
         android:id="@+id/textView5"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fontFamily="@font/allura"
         android:gravity="center_horizontal"
-        android:text="hodnotenia" />
+        android:text="@string/hodnoteniaTitle"
+        android:textColor="@color/purple_500"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/newReviewForm"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="6dp"
         android:ems="10"
         android:gravity="start|top"
         android:hint="@string/review_text_hint"
         android:inputType="textMultiLine"
         android:maxLines="4"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/newReviewForm"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/reviewSubmitBtn">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewReviwesItems"
@@ -51,10 +58,11 @@
         android:id="@+id/reviewSubmitBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="28dp"
+        android:layout_marginEnd="6dp"
         android:text="@string/review_submit"
+        android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/newReviewForm" />
+        app:layout_constraintTop_toBottomOf="@+id/newReviewForm" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

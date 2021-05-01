@@ -40,13 +40,14 @@
             android:background="?attr/colorPrimary"
             app:titleTextColor="@color/white"
             android:elevation="4dp"
-            android:theme="@style/Theme.ReservationApp.NoActionBar"
+            android:theme="@style/Theme.ReservationApp.DarkActionBar"
             app:menu="@menu/action_menu"
-            >
+            app:titleTextAppearance="@font/allura"
+            />
 <!--            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">-->
 <!--            app:menu="@menu/action_menu">-->
 
-        </androidx.appcompat.widget.Toolbar>
+
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"

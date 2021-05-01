@@ -10,13 +10,22 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bachelor.reservation.adapters.reviewAdapter
+import com.bachelor.reservation.classes.Reservation
 import com.bachelor.reservation.classes.Review
 import com.bachelor.reservationapp.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.android.synthetic.main.fragment_reviews.*
 import kotlinx.android.synthetic.main.fragment_reviews.view.*
+import kotlinx.android.synthetic.main.reservation_profileitem.view.*
+import kotlinx.android.synthetic.main.review_item.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,19 +62,17 @@ class ReviewsFragment : Fragment() {
         }else{
             val sharedPref: SharedPreferences = requireContext().getSharedPreferences("Data", Context.MODE_PRIVATE)
             val userName = sharedPref.getString("userName", "Not logged in")
-            val userID = FirebaseAuth.getInstance().currentUser.uid.toString()
+            val userID = FirebaseAuth.getInstance().currentUser.uid
             val reviewText = newReviewForm.text.toString()
 
             val ref = FirebaseDatabase.getInstance().getReference("Reviews")
-            val revID = ref.push().key
             val review = Review(userID, userName.toString(),reviewText)
-            revID?.let {
-                ref.child(it).setValue(review).addOnCompleteListener {
-                    if (it.isSuccessful){
-                        Toast.makeText(context, "Recenzia pridaná", Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(context, it.exception.toString(), Toast.LENGTH_LONG).show()
-                    }
+
+            ref.push().setValue(review).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Toast.makeText(context, "Recenzia pridaná", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, it.exception.toString(), Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -74,24 +81,41 @@ class ReviewsFragment : Fragment() {
 
     private  fun listReviews() = CoroutineScope(Dispatchers.IO).launch {
         try {
-            val ReviewsList = mutableListOf<Review>()
 
+            val adapter = GroupAdapter<GroupieViewHolder>()
             val ref = FirebaseDatabase.getInstance().getReference("Reviews")
-            ref.get().addOnCompleteListener {
-                it.result!!.children?.forEach {
-                    val review = Review(
-                            it.child("authorID").value.toString(),
-                            it.child("authorName").value.toString(),
-                            it.child("text").value.toString(),
-                    )
-                    ReviewsList.add(review)
+            ref.addChildEventListener(object: ChildEventListener{
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    val review = snapshot.getValue(Review::class.java)
+                    review?.let {
+                        adapter.add(reviewViewHolder(it))
+                    }
+                    recyclerViewReviwesItems.adapter = adapter
+                    recyclerViewReviwesItems.layoutManager = LinearLayoutManager(context)
                 }
-                val revAdapter = reviewAdapter(ReviewsList)
-                recyclerViewReviwesItems.apply {
-                    adapter = revAdapter
-                    layoutManager = LinearLayoutManager(context)
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                    TODO("Not yet implemented")
                 }
-            }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+
+            })
+
+
+
+
 
         } catch (e: Exception){
             withContext(Dispatchers.Main) {
@@ -99,7 +123,18 @@ class ReviewsFragment : Fragment() {
             }
         }
     }
+}
 
+class reviewViewHolder(val review: Review): Item<GroupieViewHolder>(){
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
+        viewHolder.itemView.reviewAuthorIDHidden.text = review.authorID
+        viewHolder.itemView.reviewAuthor.text = review.authorName
+        viewHolder.itemView.reviewText.text = review.text
 
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.review_item
+    }
 }

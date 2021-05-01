@@ -25,8 +25,11 @@ class MessagesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messages)
 
-        userConversation = intent.getParcelableExtra("ConversationData")
+        val bar: androidx.appcompat.widget.Toolbar = findViewById(R.id.my_toolbar)
+        setSupportActionBar(bar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        userConversation = intent.getParcelableExtra("ConversationData")
 
         loadMessages()
 

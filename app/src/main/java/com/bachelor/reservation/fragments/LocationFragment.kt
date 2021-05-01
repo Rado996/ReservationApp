@@ -25,7 +25,9 @@ class LocationFragment : Fragment() {
 
 //        mMap = viewOfLayout?.findViewById(R.id.mapView) as MapView
 //        mMap?.onCreate(savedInstanceState)
-//        mMap?.getMapAsync(this)
+//        mMap?.getMapAsync(OnMapReadyCallback {
+//
+//        })
         viewOfLayout.webView.settings.javaScriptEnabled = true
         viewOfLayout.webView.loadUrl("https://www.google.com/maps/place/Mirage/@49.2244495,18.7404273,20.13z/data=!4m5!3m4!1s0x0:0xaddf4af3b1a0d2a3!8m2!3d49.2244223!4d18.7404872")
 

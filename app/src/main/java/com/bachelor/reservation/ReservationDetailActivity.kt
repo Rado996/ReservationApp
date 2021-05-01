@@ -16,6 +16,10 @@ class ReservationDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservation_detail)
 
+        val bar: androidx.appcompat.widget.Toolbar = findViewById(R.id.my_toolbar)
+        setSupportActionBar(bar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val user: User = intent.getParcelableExtra("User")
         val reservation: Reservation = intent.getParcelableExtra("Reservation")
 
@@ -24,13 +28,13 @@ class ReservationDetailActivity : AppCompatActivity() {
         resDetailServices.text = reservation.service
         resDetailUserNote.text = reservation.userNote
 
-        resDetailUserName.text = user.userName
+        resDetailUserName.text = user.userName.plus(" ").plus(user.userSecondName)
         resDetailUserName.setOnClickListener {
             val intent = Intent(it.context,UserProfileActivity::class.java)
             intent.putExtra("User", user)
             it.context.startActivity(intent)
         }
-
+        resDetailUserEmail.text = user.userEmail
         resDetailUserPhone.text = user.userPhone
         resDetailSendMessage.setOnClickListener {view->
             FirebaseDatabase.getInstance().getReference("Conversations").child(user.uid.toString()).get().addOnCompleteListener {

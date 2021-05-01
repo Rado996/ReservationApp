@@ -262,7 +262,6 @@ class specialHourViewHolder(val datep: String, val startHours: String, val endHo
         }
     }
 
-    override fun getLayout(): Int {
-        return R.layout.special_date_item
-    }
+    override fun getLayout() = R.layout.special_date_item
+
 }
