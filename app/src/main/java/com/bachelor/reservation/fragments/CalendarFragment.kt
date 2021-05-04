@@ -86,20 +86,9 @@ class CalendarFragment : Fragment() {
                     val kids = result?.children
                     kids?.forEach {
 
-                        val rezervation = Reservation(
-                                it.child("reservationID").value.toString(),
-                                it.child("userID").value.toString(),
-                                it.child("service").value.toString(),
-                                it.child("day").value.toString(),
-                                it.child("month").value.toString(),
-                                it.child("year").value.toString(),
-                                it.child("startHour").value.toString(),
-                                it.child("startMinute").value.toString(),
-                                it.child("endHour").value.toString(),
-                                it.child("endMinute").value.toString(),
-                        )
+                        val rezervation = it.getValue(Reservation::class.java)
 
-                        adapter.add(dayReservationsViewHolder(rezervation))
+                        adapter.add(dayReservationsViewHolder(rezervation!!))
                         //reservationList.add(Picture(it.key,it.child("link").value.toString(),it.child("description").value.toString()))
                     }
                     recyclerViewReservationItems.adapter = adapter
@@ -121,6 +110,7 @@ class CalendarFragment : Fragment() {
 
 class dayReservationsViewHolder(val reservation: Reservation): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+
         viewHolder.itemView.resStartTime.text = reservation.startHour.plus(":").plus(reservation.startMinute)
         viewHolder.itemView.resEndTime.text = reservation.endHour.plus(":").plus(reservation.endMinute)
         viewHolder.itemView.reservedService.text = reservation.service

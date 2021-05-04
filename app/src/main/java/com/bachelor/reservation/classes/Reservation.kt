@@ -5,7 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class Reservation(
-        val reservationID: String?,
+        val reservationID: String? = null,
         val userID: String? = null,
         val service: String?= null,
         val day: String?= null,

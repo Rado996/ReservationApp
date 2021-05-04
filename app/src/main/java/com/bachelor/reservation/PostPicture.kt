@@ -54,7 +54,7 @@ class PostPicture : AppCompatActivity() {
             filePath.putFile(imageUri)
                 .addOnSuccessListener {
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext, "File uploaded", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(applicationContext, "Picture uploaded", Toast.LENGTH_SHORT).show()
                     it.storage.downloadUrl.addOnSuccessListener { it ->
                         imageUrl = it.toString()
                         val ref = FirebaseDatabase.getInstance().getReference("Pics")
@@ -70,10 +70,7 @@ class PostPicture : AppCompatActivity() {
                                         Toast.makeText(applicationContext, "Canceled", Toast.LENGTH_SHORT).show()
                                     }
                                     .addOnCompleteListener {
-                                        Toast.makeText(applicationContext, "completed", Toast.LENGTH_SHORT).show()
-                                    }
-                                    .addOnSuccessListener {
-                                        Toast.makeText(applicationContext, "succes", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(applicationContext, "Post saved", Toast.LENGTH_SHORT).show()
                                     }
                         }
                     }

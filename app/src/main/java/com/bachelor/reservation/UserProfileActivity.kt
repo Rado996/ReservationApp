@@ -38,11 +38,11 @@ class UserProfileActivity : AppCompatActivity() {
         if(intent.hasExtra("User")){
             user = intent.getParcelableExtra("User")
             query = res.whereEqualTo("userID",user.uid)
+            displayUserData(user)
         }else{
             query = res.whereEqualTo("userID",FirebaseAuth.getInstance().uid)
+            loadUserData()
         }
-
-        loadUserData()
 
         val adapter = GroupAdapter<GroupieViewHolder>()
         query.get().addOnCompleteListener{ document->
@@ -78,7 +78,7 @@ class UserProfileActivity : AppCompatActivity() {
             displayUserData(user)
 
         }else {
-            FirebaseDatabase.getInstance().getReference("Users").child(user.uid.toString()).get()
+            FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().uid.toString()).get()
                 .addOnCompleteListener { task ->
                     if (!task.isSuccessful) {
                         Log.e("firebase", "Error getting data", task.exception)

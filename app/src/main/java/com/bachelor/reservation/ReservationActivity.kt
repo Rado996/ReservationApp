@@ -35,6 +35,8 @@ class ReservationActivity : AppCompatActivity() {
     var endMinute = ""
     lateinit var dialogBuilder: AlertDialog.Builder
     val selectedServices = mutableListOf<String>()
+    lateinit var services: Array<String>
+    lateinit var checktServices: BooleanArray
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +46,8 @@ class ReservationActivity : AppCompatActivity() {
         val bar: androidx.appcompat.widget.Toolbar = findViewById(R.id.my_toolbar)
         setSupportActionBar(bar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        //bar.showOverflowMenu()
+
+        loadServices()
 
         if(intent.hasExtra("Reservation")){
             setData(intent.getParcelableExtra<Reservation>("Reservation"))
@@ -67,44 +70,47 @@ class ReservationActivity : AppCompatActivity() {
 
     }
 
-    private fun showServicePickerDialog() {
-
+    private fun loadServices() {
         FirebaseDatabase.getInstance().getReference("Services").get().addOnCompleteListener {
-            if(it.isSuccessful){
-                val services = Array<String>(it.result!!.childrenCount.toInt()) { i -> ""}
+            if (it.isSuccessful) {
+                services = Array<String>(it.result!!.childrenCount.toInt()) { i -> "" }
+                checktServices = BooleanArray(it.result!!.childrenCount.toInt()) { i -> false}
                 var i = 0
                 it.result!!.children.forEach {
-                    //services.set(services.size,it.key.toString())
-                    services[i]= it.key.toString()
+                    services[i] = it.key.toString()
                     i++
                 }
-
-                dialogBuilder.setMultiChoiceItems(services, null, DialogInterface.OnMultiChoiceClickListener { dialog, which, isChecked ->
-                    if (isChecked)
-                        selectedServices.add(services[which])
-                    else if (selectedServices.contains(services[which]))
-                        selectedServices.remove(services[which])
-                })
-                dialogBuilder.setPositiveButton("Hotovo", DialogInterface.OnClickListener { dialog, which ->
-                    var Services = ""
-
-                    for (i in 0..selectedServices.size) {
-                        if(i < selectedServices.size) {
-                            Services += selectedServices[i]
-                            if (i < selectedServices.size - 1)
-                                Services += ","
-                        }
-                    }
-                    chooosenService.setText(Services)
-                })
-                dialogBuilder.setNegativeButton("Zruš", null)
-
-                //dialogBuilder.show()
-                val dialog: AlertDialog = dialogBuilder.create()
-                dialog.show()
             }
         }
     }
+
+    private fun showServicePickerDialog() {
+
+        dialogBuilder.setMultiChoiceItems(services, checktServices , DialogInterface.OnMultiChoiceClickListener { dialog, which, isChecked ->
+            if (isChecked)
+                selectedServices.add(services[which])
+            else if (selectedServices.contains(services[which]))
+                selectedServices.remove(services[which])
+        })
+        dialogBuilder.setPositiveButton("Hotovo", DialogInterface.OnClickListener { dialog, which ->
+            var Services = ""
+
+            for (i in 0..selectedServices.size) {
+                if(i < selectedServices.size) {
+                    Services += selectedServices[i]
+                    if (i < selectedServices.size - 1)
+                        Services += ", "
+                }
+            }
+            chooosenService.setText(Services)
+        })
+        dialogBuilder.setNegativeButton("Zruš", null)
+
+        //dialogBuilder.show()
+        val dialog: AlertDialog = dialogBuilder.create()
+        dialog.show()
+    }
+
 
     private fun setData(reservation: Reservation?) {
         val hour = reservation!!.startHour
@@ -216,6 +222,10 @@ class ReservationActivity : AppCompatActivity() {
         }
         endMinute = finMin.toString()
         endHour = finHour.toString()
+        if(finMin < 10)
+            endMinute = "0".plus(finMin.toString())
+        if(finHour < 10)
+            endHour = "0".plus(finHour.toString())
         val newTimeStart = newHourStart + newMinuteStart
         val newTimeEnd = (finHour * 100) + finMin
 
@@ -270,13 +280,14 @@ class ReservationActivity : AppCompatActivity() {
 
         }
 
-        lateinit var oldRes:Reservation
+        var oldRes:Reservation? = null
+
         if (intent.hasExtra("Reservation")) {
             oldRes = intent.getParcelableExtra<Reservation>("Reservation")
-
         }
+
         it.result?.children?.forEach {
-            if(oldRes.reservationID != it.child("reservationID").value.toString()) {
+            if(oldRes != null  && oldRes.reservationID != it.child("reservationID").value.toString()) {
                 val reservedHourStart = it.child("startHour").value.toString().toInt() * 100
                 val reservedMinuteStart = it.child("startMinute").value.toString().toInt()
                 val reservedHourEnding = it.child("endHour").value.toString().toInt() * 100

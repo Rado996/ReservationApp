@@ -23,7 +23,7 @@ class ReservationDetailActivity : AppCompatActivity() {
         val user: User = intent.getParcelableExtra("User")
         val reservation: Reservation = intent.getParcelableExtra("Reservation")
 
-        resDetailDate.text = reservation.day.toString().plus(",").plus(reservation.month.toString()).plus(",").plus(reservation.year.toString())
+        resDetailDate.text = reservation.day.toString().plus(".").plus(reservation.month.toString()).plus(".").plus(reservation.year.toString())
         resDetailTime.text = reservation.startHour.plus(":").plus(reservation.startMinute).plus(" - ").plus(reservation.endHour.plus(":").plus(reservation.endMinute))
         resDetailServices.text = reservation.service
         resDetailUserNote.text = reservation.userNote

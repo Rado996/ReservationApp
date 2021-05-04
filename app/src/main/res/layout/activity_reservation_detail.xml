@@ -43,19 +43,25 @@
 
     <TextView
         android:id="@+id/resDetailServices"
-        android:layout_width="wrap_content"
+        android:layout_width="149dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:maxLines="3"
         android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/resDetailDate"
         app:layout_constraintTop_toBottomOf="@+id/resDetailDate" />
 
     <TextView
         android:id="@+id/resDetailUserNote"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:maxLines="4"
         android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/resDetailDate"
         app:layout_constraintTop_toBottomOf="@+id/resDetailServices" />
 
@@ -111,7 +117,6 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="32dp"
         android:text="Služby:"
-        app:layout_constraintBottom_toBottomOf="@+id/resDetailServices"
         app:layout_constraintEnd_toStartOf="@+id/resDetailServices"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/textView12"
@@ -155,5 +160,13 @@
         android:text="TextView"
         app:layout_constraintStart_toStartOf="@+id/resDetailUserName"
         app:layout_constraintTop_toBottomOf="@+id/resDetailUserPhone" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pozn_mka"
+        app:layout_constraintStart_toStartOf="@+id/textView13"
+        app:layout_constraintTop_toTopOf="@+id/resDetailUserNote" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

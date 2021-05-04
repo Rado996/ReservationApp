@@ -19,6 +19,11 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
+        val bar: androidx.appcompat.widget.Toolbar = findViewById(R.id.my_toolbar)
+        setSupportActionBar(bar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         mAuth = FirebaseAuth.getInstance()
     }
 

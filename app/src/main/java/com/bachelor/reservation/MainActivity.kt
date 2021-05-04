@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.android.synthetic.main.fragment_gallery.*
 import java.util.*
 
+// Hlavná aktivita ktorá sa spustí pri otvorení aplikácie
 
 class MainActivity : AppCompatActivity() {
 

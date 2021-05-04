@@ -24,7 +24,7 @@ class AddService : AppCompatActivity() {
 
     lateinit var service: Service
     private val pickImage = 100
-    lateinit var imageUri: Uri
+    var imageUri: Uri? = null
     lateinit var imageUrl : String
     lateinit var serviceId: String
 
@@ -57,7 +57,7 @@ class AddService : AppCompatActivity() {
         if(imageUri != null){
             var stor = FirebaseStorage.getInstance().getReference("Pictures")
             val filePath: StorageReference = stor.child(System.currentTimeMillis().toString() + "." + getFileExtention(imageUri))
-            filePath.putFile(imageUri)
+            filePath.putFile(imageUri!!)
                     .addOnSuccessListener {
                         Toast.makeText(applicationContext, "File uploaded", Toast.LENGTH_SHORT).show()
                         it.storage.downloadUrl.addOnSuccessListener { it ->

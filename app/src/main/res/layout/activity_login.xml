@@ -6,6 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/Theme.ReservationApp.DarkActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/action_menu"
+        app:titleTextAppearance="@font/allura"
+        app:titleTextColor="@color/white" />
 
 
     <EditText
@@ -56,7 +69,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="62dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="72dp"
         android:text="@string/LoginBanner"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"

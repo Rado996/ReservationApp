@@ -85,21 +85,21 @@
     <TextView
         android:id="@+id/chooosenService"
         android:layout_width="234dp"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
+        android:background="@drawable/rounder_white"
         android:ems="10"
         android:maxLines="4"
         android:padding="5dp"
         android:text="@string/choose_services"
-        android:textSize="24sp"
-        android:background="@drawable/rounder_white"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/choosenDate"
         app:layout_constraintTop_toBottomOf="@+id/pickTime" />
 
     <EditText
         android:id="@+id/userNote"
         android:layout_width="288dp"
-        android:layout_height="46dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
         android:ems="10"
         android:gravity="start|top"

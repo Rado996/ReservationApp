@@ -33,7 +33,7 @@ class ConversationsActivity : AppCompatActivity() {
     private fun loadConversations() {
        val userID = FirebaseAuth.getInstance().uid
 
-        if(userID == "PFMzSqH2i4auX7MvE5t4nAOtpDH3"){
+        if(userID == "H2GR3OXOFQg1gEqDHrHfxpzh2Wc2"){
 
             var convRef = FirebaseDatabase.getInstance().getReference("Conversations")
             convRef.addListenerForSingleValueEvent(object: ValueEventListener {
@@ -46,7 +46,7 @@ class ConversationsActivity : AppCompatActivity() {
                         adapter.add(ConversationViewHolder(userConvers!!))
                         }
                     } else{
-                        val conversation = UserConversation("","PFMzSqH2i4auX7MvE5t4nAOtpDH3", "","Žiadne správy." , "")
+                        val conversation = UserConversation("","H2GR3OXOFQg1gEqDHrHfxpzh2Wc2", "","Žiadne správy." , "")
                         adapter.add(ConversationViewHolder(conversation))
                     }
                     conversationsRecyclerView.adapter = adapter
@@ -63,9 +63,10 @@ class ConversationsActivity : AppCompatActivity() {
             convRef.addListenerForSingleValueEvent(object: ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val adapter = GroupAdapter<GroupieViewHolder>()
+                    if(snapshot.hasChildren()) {
                     val userConvers= snapshot.getValue(UserConversation::class.java)
                     adapter.add(ConversationViewHolder(userConvers!!))
-                    if(snapshot.hasChildren()) {
+
 //                    snapshot.children.forEach {
 ////                        val userConvers= it.getValue(UserConversation::class.java)
 //                        val userConvers = UserConversation(
@@ -76,7 +77,7 @@ class ConversationsActivity : AppCompatActivity() {
 //                                it.child("participantTwoName").value.toString())
                         //}
                     } else{
-                        val conversation = UserConversation("","PFMzSqH2i4auX7MvE5t4nAOtpDH3", "","Napíšte nám." , "")
+                        val conversation = UserConversation("","H2GR3OXOFQg1gEqDHrHfxpzh2Wc2", "","Napíšte nám." , "")
                         adapter.add(ConversationViewHolder(conversation))
                     }
                     conversationsRecyclerView.adapter = adapter

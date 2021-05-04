@@ -20,6 +20,10 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         mAuth = FirebaseAuth.getInstance()
 
+        val bar: androidx.appcompat.widget.Toolbar = findViewById(R.id.my_toolbar)
+        setSupportActionBar(bar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         loginBtn.setOnClickListener {
             LoginButton()
         }

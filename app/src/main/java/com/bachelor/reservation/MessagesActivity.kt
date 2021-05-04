@@ -20,11 +20,14 @@ class MessagesActivity : AppCompatActivity() {
 
     val curUserID = FirebaseAuth.getInstance().uid
     lateinit var userConversation: UserConversation
+    lateinit var adminID: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messages)
-
+        val sharedPref = this.getSharedPreferences("Data", AppCompatActivity.MODE_PRIVATE)
+       adminID = sharedPref?.getString("AdminID", "Error").toString()
         val bar: androidx.appcompat.widget.Toolbar = findViewById(R.id.my_toolbar)
         setSupportActionBar(bar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -45,7 +48,8 @@ class MessagesActivity : AppCompatActivity() {
             var participant1ID = userConversation.participantOneID
             var participant2ID = FirebaseAuth.getInstance().uid.toString()
 
-            if(participant2ID == "PFMzSqH2i4auX7MvE5t4nAOtpDH3") {
+
+            if(participant2ID == adminID) {
                 participant2ID = userConversation.participantOneID.toString()
                 participant1ID = FirebaseAuth.getInstance().uid.toString()
             }
@@ -65,7 +69,7 @@ class MessagesActivity : AppCompatActivity() {
                                     FirebaseDatabase.getInstance().getReference("Messages/${conversationID}/${msgID}").setValue(message).addOnCompleteListener {
                                         Toast.makeText(applicationContext, "Odoslane a vytvorena konverzacia", Toast.LENGTH_SHORT).show()
                                         messageTextForm.text.clear()
-                                        //loadMessages()
+                                        loadMessages()
                                     }
 
                                 } else {
@@ -102,7 +106,7 @@ class MessagesActivity : AppCompatActivity() {
 
     private fun loadMessages() {
         val adapter = GroupAdapter<GroupieViewHolder>()
-        if(userConversation.convID == "" && FirebaseAuth.getInstance().uid != "PFMzSqH2i4auX7MvE5t4nAOtpDH3"){
+        if(userConversation.convID == "" && FirebaseAuth.getInstance().uid != adminID){
             val adapter1 = GroupAdapter<GroupieViewHolder>()
 
             val message = com.bachelor.reservation.classes.Message("", "Pomôžeme Vám?.", "", "")

@@ -29,15 +29,19 @@
 
         <TextView
             android:id="@+id/profileReserationServices"
-            android:layout_width="wrap_content"
+            android:layout_width="169dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
+            android:maxLines="3"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/profileReserationTime"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profileReserationDate" />
+            app:layout_constraintTop_toBottomOf="@+id/profileReserationDate"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/profileReserationTime"

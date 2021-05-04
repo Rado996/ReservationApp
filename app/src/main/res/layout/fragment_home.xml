@@ -112,7 +112,7 @@
         app:layout_constraintStart_toEndOf="@+id/textView6"
 
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"
+        android:visibility="visible"
 
         />
 
@@ -126,7 +126,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/homeSpecialOpenHoursRecycler"
-        android:visibility="gone"
+        android:visibility="visible"
         />
 
     <androidx.appcompat.widget.LinearLayoutCompat
