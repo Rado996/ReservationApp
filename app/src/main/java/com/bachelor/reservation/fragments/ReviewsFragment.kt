@@ -9,9 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bachelor.reservation.adapters.reviewAdapter
-import com.bachelor.reservation.classes.Reservation
 import com.bachelor.reservation.classes.Review
+import com.bachelor.reservation.viewHolders.reviewViewHolder
 import com.bachelor.reservationapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
@@ -21,10 +20,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
-import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.android.synthetic.main.fragment_reviews.*
 import kotlinx.android.synthetic.main.fragment_reviews.view.*
-import kotlinx.android.synthetic.main.reservation_profileitem.view.*
 import kotlinx.android.synthetic.main.review_item.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +36,7 @@ class ReviewsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -114,9 +112,6 @@ class ReviewsFragment : Fragment() {
             })
 
 
-
-
-
         } catch (e: Exception){
             withContext(Dispatchers.Main) {
                 Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
@@ -125,16 +120,3 @@ class ReviewsFragment : Fragment() {
     }
 }
 
-class reviewViewHolder(val review: Review): Item<GroupieViewHolder>(){
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-
-        viewHolder.itemView.reviewAuthorIDHidden.text = review.authorID
-        viewHolder.itemView.reviewAuthor.text = review.authorName
-        viewHolder.itemView.reviewText.text = review.text
-
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.review_item
-    }
-}

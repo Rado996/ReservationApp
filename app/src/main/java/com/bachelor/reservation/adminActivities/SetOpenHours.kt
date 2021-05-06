@@ -1,36 +1,22 @@
-package com.bachelor.reservation
+package com.bachelor.reservation.adminActivities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bachelor.reservation.classes.Day
-import com.bachelor.reservation.classes.Message
-import com.bachelor.reservation.classes.Reservation
 import com.bachelor.reservation.fragments.DatePickerFragment
-import com.bachelor.reservation.fragments.TimePickerFragment
+import com.bachelor.reservation.viewHolders.specialHoursViewHolder
 import com.bachelor.reservationapp.R
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import com.xwray.groupie.Item
-import kotlinx.android.synthetic.main.activity_messages.*
-import kotlinx.android.synthetic.main.activity_reservation.*
 import kotlinx.android.synthetic.main.activity_set_open_hours.*
-import kotlinx.android.synthetic.main.reservation_profileitem.view.*
-import kotlinx.android.synthetic.main.special_date_open_hours_item.*
-import kotlinx.android.synthetic.main.special_date_open_hours_item.view.*
-import java.time.DayOfWeek
 import java.util.*
-import java.util.Calendar.MONTH
-import kotlinx.android.synthetic.main.activity_reservation.choosenDate as choosenDate1
 
 class SetOpenHours : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -332,23 +318,4 @@ class SetOpenHours : AppCompatActivity() {
 }
 
 
-class specialHoursViewHolder(val datep: String, val startHours: String, val endHours:String): Item<GroupieViewHolder>(){
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        val date = datep.split(',')
-        viewHolder.itemView.specialDate.text = date.component1().plus(".").plus(date.component2()).plus(".").plus(date.component3())
-        viewHolder.itemView.specialStart.text = startHours
-        viewHolder.itemView.specialEnd.text = endHours
 
-        viewHolder.itemView.specialHoursDeleteBtn.setOnClickListener {
-            FirebaseDatabase.getInstance().getReference("SpecialOpenHours/${datep}").removeValue()
-
-            //viewHolder.itemView.visibility = "gone".toInt()
-        }
-
-
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.special_date_open_hours_item
-    }
-}

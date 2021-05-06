@@ -112,7 +112,7 @@
         app:layout_constraintStart_toEndOf="@+id/textView6"
 
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="visible"
+        android:visibility="gone"
 
         />
 
@@ -126,19 +126,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/homeSpecialOpenHoursRecycler"
-        android:visibility="visible"
+        android:visibility="gone"
         />
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/linearLayoutServices"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/addServiceBtn"
-        tools:layout_editor_absoluteX="125dp"
-        android:orientation="vertical">
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <TextView
         android:id="@+id/secondDayWeek"
@@ -210,8 +199,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-
-
         app:layout_constraintTop_toBottomOf="@+id/firstDayWeek"
         tools:layout_editor_absoluteX="0dp" />
 
@@ -228,6 +215,19 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/servivesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

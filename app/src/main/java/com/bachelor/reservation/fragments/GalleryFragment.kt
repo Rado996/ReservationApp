@@ -2,19 +2,19 @@ package com.bachelor.reservationapp.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bachelor.reservation.adapters.pictureAdapter
-import com.bachelor.reservationapp.PostPicture
+import com.bachelor.reservation.adminActivities.PostPicture
 import com.bachelor.reservationapp.R
 import com.bachelor.reservationapp.classes.Picture
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.fragment_gallery.*
 
 import kotlinx.android.synthetic.main.fragment_gallery.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -36,9 +36,15 @@ class GalleryFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         viewOfLayout = inflater!!.inflate(R.layout.fragment_gallery, container, false)
-        viewOfLayout.addPicture.setOnClickListener {
-            val intent = Intent(activity, PostPicture::class.java)
-            startActivity(intent)
+
+        val sharedPref = viewOfLayout.context.getSharedPreferences("Data", AppCompatActivity.MODE_PRIVATE)
+        val adminID: String? = sharedPref.getString("AdminID", "Error")
+        if(FirebaseAuth.getInstance().uid == adminID) {
+            viewOfLayout.addPicture.setVisibility(View.VISIBLE)
+            viewOfLayout.addPicture.setOnClickListener {
+                val intent = Intent(activity, PostPicture::class.java)
+                startActivity(intent)
+            }
         }
         listPictures()
         return viewOfLayout
@@ -62,9 +68,6 @@ class GalleryFragment : Fragment() {
                     layoutManager = LinearLayoutManager(context)
                 }
             }
-//            withContext(Dispatchers.Main){
-//
-//            }
 
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {

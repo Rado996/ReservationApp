@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import com.bachelor.reservation.ConversationsActivity
-import com.bachelor.reservation.LoginActivity
-import com.bachelor.reservation.UserProfileActivity
+import com.bachelor.reservation.activities.ConversationsActivity
+import com.bachelor.reservation.activities.LoginActivity
+import com.bachelor.reservation.activities.UserProfileActivity
 import com.bachelor.reservation.fragments.LocationFragment
 import com.bachelor.reservationapp.adapters.ViewPagerAdapter
 import com.bachelor.reservationapp.fragments.CalendarFragment
@@ -78,17 +78,6 @@ class MainActivity : AppCompatActivity() {
             }
             return@OnMenuItemClickListener false
         })
-
-
-
-//        val calenda: CalendarView = findViewById(R.id.calendarViewReservations)
-//
-//        calenda.setOnDateChangeListener { caleda, year, month, dayOfMonth ->
-//            val selectedDate = dayOfMonth.toString().plus(",").plus(month.toString()).plus(",").plus(year.toString())
-//            listReservations(selectedDate)
-//        }
-
-
 
     }
 

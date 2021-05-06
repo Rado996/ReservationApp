@@ -1,25 +1,21 @@
-package com.bachelor.reservationapp
+package com.bachelor.reservation.adminActivities
 
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bachelor.reservationapp.R
 import com.bachelor.reservationapp.classes.Picture
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthWebException
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.Logger
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
 import kotlinx.android.synthetic.main.activity_post_picture.*
-import java.net.URL
 
 class PostPicture : AppCompatActivity() {
 

@@ -50,7 +50,8 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/ic_baseline_delete_24"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/reservationEditBtn"
@@ -59,7 +60,8 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/ic_baseline_edit_24"
             app:layout_constraintEnd_toStartOf="@+id/reservationDeleteBtn"
-            app:layout_constraintTop_toTopOf="@+id/reservationDeleteBtn" />
+            app:layout_constraintTop_toTopOf="@+id/reservationDeleteBtn"
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/reservedService"

@@ -8,24 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CalendarView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bachelor.reservation.ReservationActivity
-import com.bachelor.reservation.ReservationDetailActivity
+import com.bachelor.reservation.activities.ReservationActivity
 import com.bachelor.reservation.classes.Reservation
+import com.bachelor.reservation.viewHolders.dayReservationsViewHolder
 import com.bachelor.reservationapp.R
-import com.bachelor.reservationapp.classes.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import com.xwray.groupie.Item
-import kotlinx.android.synthetic.main.activity_messages.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.android.synthetic.main.fragment_calendar.view.*
-import kotlinx.android.synthetic.main.reservation_item.view.*
-import kotlinx.android.synthetic.main.reservation_profileitem.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,7 +41,7 @@ class CalendarFragment : Fragment() {
 
         viewOfLayout.createReservationBtn.setOnClickListener {
             if(FirebaseAuth.getInstance().currentUser != null){
-                val intent= Intent(activity,ReservationActivity::class.java)
+                val intent= Intent(activity, ReservationActivity::class.java)
                 startActivity(intent)
             } else {
                 Toast.makeText(context, "Najpr sa prihláste pre vytvorenie rezervácie!", Toast.LENGTH_SHORT).show()
@@ -108,48 +101,4 @@ class CalendarFragment : Fragment() {
 }
 
 
-class dayReservationsViewHolder(val reservation: Reservation): Item<GroupieViewHolder>(){
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
-        viewHolder.itemView.resStartTime.text = reservation.startHour.plus(":").plus(reservation.startMinute)
-        viewHolder.itemView.resEndTime.text = reservation.endHour.plus(":").plus(reservation.endMinute)
-        viewHolder.itemView.reservedService.text = reservation.service
-
-        val sharedPref = viewHolder.itemView.context.getSharedPreferences("Data", AppCompatActivity.MODE_PRIVATE)
-        val adminID: String? = sharedPref?.getString("AdminID", "Error")
-
-        if(FirebaseAuth.getInstance().uid == adminID) {
-            viewHolder.itemView.setOnClickListener { view ->
-                FirebaseDatabase.getInstance().getReference("Users").child(reservation.userID.toString()).get().addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        val user: User = it.result!!.getValue(User::class.java)!!
-                        val intent = Intent(view.context, ReservationDetailActivity::class.java)
-                        intent.putExtra("Reservation", reservation)
-                        intent.putExtra("User", user)
-                        view.context.startActivity(intent)
-                    }
-                }
-            }
-        }
-
-        if(reservation.userID == FirebaseAuth.getInstance().uid || FirebaseAuth.getInstance().uid == adminID) {
-
-            viewHolder.itemView.reservationEditBtn.setOnClickListener {
-                val intent = Intent(it.context, ReservationActivity::class.java)
-                intent.putExtra("Reservation", reservation)
-                it.context.startActivity(intent)
-            }
-
-            viewHolder.itemView.reservationDeleteBtn.setOnClickListener {
-                val ref = FirebaseDatabase.getInstance().getReference("Reservation").child(reservation.day.toString().plus(",").plus(reservation.month.toString()).plus(",").plus(reservation.year.toString()))
-                ref.child(reservation.reservationID.toString()).removeValue()
-                FirebaseFirestore.getInstance().collection("Reservations").document(reservation.reservationID.toString()).delete()
-            }
-        }
-
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.reservation_item
-    }
-}

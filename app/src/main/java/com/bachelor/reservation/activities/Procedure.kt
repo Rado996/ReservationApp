@@ -1,4 +1,4 @@
-package com.bachelor.reservation
+package com.bachelor.reservation.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

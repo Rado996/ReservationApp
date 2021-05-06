@@ -1,20 +1,19 @@
-package com.bachelor.reservation
+package com.bachelor.reservation.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bachelor.reservation.classes.Reservation
+import com.bachelor.reservation.viewHolders.userReservationsViewHolder
 import com.bachelor.reservationapp.R
 import com.bachelor.reservationapp.classes.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_messages.*
 import kotlinx.android.synthetic.main.activity_user_profile.*
 import kotlinx.android.synthetic.main.message_from.view.*
@@ -53,13 +52,9 @@ class UserProfileActivity : AppCompatActivity() {
                                                         data["reservationID"].toString(),
                                                         data["userID"].toString(),
                                                         data["service"].toString(),
-                                                        data["day"].toString(),
-                                                        data["month"].toString(),
-                                                        data["year"].toString(),
-                                                        data["startHour"].toString(),
-                                                        data["startMinute"].toString(),
-                                                        data["endHour"].toString(),
-                                                        data["endMinute"].toString(),
+                                                        data["date"].toString(),
+                                                        data["startTime"].toString(),
+                                                        data["endTime"].toString(),
                                                         data["userNote"].toString(),
                                                         data["confirmed"] as Boolean?,
                                                         data["finished"] as Boolean?,
@@ -101,19 +96,5 @@ class UserProfileActivity : AppCompatActivity() {
 }
 
 
-class userReservationsViewHolder(val reservation: Reservation): Item<GroupieViewHolder>(){
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        val date = reservation.day.plus(".").plus(reservation.month.toString()).plus(".").plus(reservation.year.toString())
-        viewHolder.itemView.profileReserationDate.text = date
-        viewHolder.itemView.profileReserationTime.text = reservation.startHour.plus(":").plus(reservation.startMinute)
-        viewHolder.itemView.profileReserationServices.text = reservation.service
 
-
-
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.reservation_profileitem
-    }
-}
 

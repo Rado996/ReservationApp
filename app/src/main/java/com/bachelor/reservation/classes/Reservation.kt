@@ -8,23 +8,15 @@ data class Reservation(
         val reservationID: String? = null,
         val userID: String? = null,
         val service: String?= null,
-        val day: String?= null,
-        val month: String?= null,
-        val year: String?= null,
-        val startHour: String?= null,
-        val startMinute: String?= null,
-        val endHour: String?= null,
-        val endMinute: String? = null,
+        val date: String?= null,
+        val startTime: String?= null,
+        val endTime: String? = null,
         val userNote: String? = null,
         val confirmed: Boolean? = false,
         val finished: Boolean? = false,
         val adminNote: String? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
@@ -41,13 +33,9 @@ data class Reservation(
         parcel.writeString(reservationID)
         parcel.writeString(userID)
         parcel.writeString(service)
-        parcel.writeString(day)
-        parcel.writeString(month)
-        parcel.writeString(year)
-        parcel.writeString(startHour)
-        parcel.writeString(startMinute)
-        parcel.writeString(endHour)
-        parcel.writeString(endMinute)
+        parcel.writeString(date)
+        parcel.writeString(startTime)
+        parcel.writeString(endTime)
         parcel.writeString(userNote)
         parcel.writeValue(confirmed)
         parcel.writeValue(finished)

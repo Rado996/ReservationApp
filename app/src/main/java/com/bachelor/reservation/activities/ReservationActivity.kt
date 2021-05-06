@@ -1,4 +1,4 @@
-package com.bachelor.reservation
+package com.bachelor.reservation.activities
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -13,17 +13,22 @@ import com.bachelor.reservation.classes.Reservation
 import com.bachelor.reservation.fragments.DatePickerFragment
 import com.bachelor.reservation.fragments.TimePickerFragment
 import com.bachelor.reservationapp.R
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_add_service.*
 import kotlinx.android.synthetic.main.activity_reservation.*
 import kotlinx.android.synthetic.main.reservation_item.*
 import java.util.*
 
 
 class ReservationActivity : AppCompatActivity() {
+
+
+    val SAVED_DATE_BUNDLE_KEY = "RES_DATE"
+    val SAVED_TIME_BUNDLE_KEY = "RES_TIME"
+    val SAVED_NOTE_BUNDLE_KEY = "RES_NOTE"
 
 
     var day = ""
@@ -33,10 +38,22 @@ class ReservationActivity : AppCompatActivity() {
     var startMinute = ""
     var endHour = ""
     var endMinute = ""
+
+    var date = ""
+    var startTime = ""
+    var endTime = ""
+    var specialDayStartTime = "null"
+    var specialDayEndTime = "null"
+
+    var duration = 0
+
     lateinit var dialogBuilder: AlertDialog.Builder
     val selectedServices = mutableListOf<String>()
     lateinit var services: Array<String>
     lateinit var checktServices: BooleanArray
+
+    lateinit var dayReservations: DataSnapshot
+    lateinit var weekDay: Day
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,11 +87,28 @@ class ReservationActivity : AppCompatActivity() {
 
     }
 
-    private fun loadServices() {
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {   // ak mam uložene dáta tak ich ziskam z bundlu
+        super.onRestoreInstanceState(savedInstanceState)
+
+
+        choosenTime.setText(savedInstanceState.getString(SAVED_DATE_BUNDLE_KEY))
+        choosenDate.setText(savedInstanceState.getString(SAVED_TIME_BUNDLE_KEY))
+        userNote.setText(savedInstanceState.getString(SAVED_NOTE_BUNDLE_KEY))
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {        // uložím dáta ak sa ide aktivita ukončiť
+        super.onSaveInstanceState(outState)
+
+        outState.putString(SAVED_DATE_BUNDLE_KEY, date)
+        outState.putString(SAVED_TIME_BUNDLE_KEY, startTime)
+        outState.putString(SAVED_NOTE_BUNDLE_KEY, userNote.text.toString())
+    }
+
+    private fun loadServices() {        //načitam ponukane služby z databázy kvôli dialogu na výber služby
         FirebaseDatabase.getInstance().getReference("Services").get().addOnCompleteListener {
             if (it.isSuccessful) {
-                services = Array<String>(it.result!!.childrenCount.toInt()) { i -> "" }
-                checktServices = BooleanArray(it.result!!.childrenCount.toInt()) { i -> false}
+                services = Array<String>(it.result!!.childrenCount.toInt()) { p0 -> "" }         //všetky slulžby
+                checktServices = BooleanArray(it.result!!.childrenCount.toInt()) { p0 -> false}      //inicializujem boolean pole pre ukladanie zvolenych služieb
                 var i = 0
                 it.result!!.children.forEach {
                     services[i] = it.key.toString()
@@ -84,15 +118,15 @@ class ReservationActivity : AppCompatActivity() {
         }
     }
 
-    private fun showServicePickerDialog() {
+    private fun showServicePickerDialog() { //dialog
 
-        dialogBuilder.setMultiChoiceItems(services, checktServices , DialogInterface.OnMultiChoiceClickListener { dialog, which, isChecked ->
+        dialogBuilder.setMultiChoiceItems(services, checktServices , DialogInterface.OnMultiChoiceClickListener { dialog, which, isChecked ->   //vytvorim dialog s možnosťami
             if (isChecked)
                 selectedServices.add(services[which])
             else if (selectedServices.contains(services[which]))
                 selectedServices.remove(services[which])
         })
-        dialogBuilder.setPositiveButton("Hotovo", DialogInterface.OnClickListener { dialog, which ->
+        dialogBuilder.setPositiveButton("Hotovo", DialogInterface.OnClickListener { dialog, which ->        // button na potvrdenie
             var Services = ""
 
             for (i in 0..selectedServices.size) {
@@ -104,7 +138,7 @@ class ReservationActivity : AppCompatActivity() {
             }
             chooosenService.setText(Services)
         })
-        dialogBuilder.setNegativeButton("Zruš", null)
+        dialogBuilder.setNegativeButton("Zruš", null)       //navrat button
 
         //dialogBuilder.show()
         val dialog: AlertDialog = dialogBuilder.create()
@@ -112,111 +146,125 @@ class ReservationActivity : AppCompatActivity() {
     }
 
 
-    private fun setData(reservation: Reservation?) {
-        val hour = reservation!!.startHour
-        val minute = reservation.startMinute
-        val day = reservation.day
-        val month = reservation.month
-        val year = reservation.year
+    private fun setData(reservation: Reservation?) {        // ak upravujem nejaku rezerváciu tak nastavím zvolene hodnoty
 
-        choosenDate.text = day.plus(".").plus(month).plus(".").plus(year)
-        choosenTime.text = hour.plus(":").plus(minute)
+        choosenDate.text = reservation!!.date
+        choosenTime.text = reservation.startTime
         chooosenService.setText(reservation.service)
         userNote.setText(reservation.userNote)
     }
 
-    private fun submitReservation() {
+    private fun submitReservation() {    // po kliknuti na tlačidlo začína overenie či môže byť reservacia vytvorena
         val userID = FirebaseAuth.getInstance().uid
-        val service = chooosenService.text.toString()
-        val note = userNote.text.toString()
+        val services = chooosenService.text.toString()
         if(userID.isNullOrBlank()){
             Toast.makeText(this@ReservationActivity, "Pred vytvorením rezervácie sa musíte prihlásiť.", Toast.LENGTH_SHORT).show()
         }else{
-            if(day.isEmpty() || startHour.isEmpty() || service.isNullOrEmpty()){
+            if(day.isEmpty() || startHour.isEmpty() || services.isNullOrEmpty()){
                 Toast.makeText(this@ReservationActivity, "Prosím skontrolujte zadané údaje.", Toast.LENGTH_SHORT).show()
             }else {
                 val date = day.plus(",").plus(month).plus(",").plus(year)
-                val ref = FirebaseDatabase.getInstance().getReference("Reservation").child(date)
-                ref.get().addOnCompleteListener { reservations ->
-//                FirebaseDatabase.getInstance().getReference("Services").child(service).get().addOnCompleteListener { dur->
-                    FirebaseDatabase.getInstance().getReference("Services").get().addOnCompleteListener { services ->
-//                    val kid = services.result!!.child("duration")
-                        var duration = 0
-                        services.result!!.children.forEach {
-                            if (selectedServices.contains(it.key))
-                                duration += it.child("duration").value.toString().toInt()
+                val ref = FirebaseDatabase.getInstance().getReference("Reservation").child(date)        //načítanie všetkych rezervácii toho dátumu
+                ref.get().addOnSuccessListener { reservations ->
+                    dayReservations = reservations
+                    getServicesDuration()
+
+
                         }
-                        val calendar = Calendar.getInstance()
-                        calendar.set(year.toInt(), month.toInt() - 1, day.toInt())
-                        val dayInWeek = calendar.get(Calendar.DAY_OF_WEEK).toString()
-
-                        FirebaseDatabase.getInstance().getReference("OpenHours/${dayInWeek}").get().addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                val dayHours = it.getResult()!!.getValue(Day::class.java)
-                                FirebaseDatabase.getInstance().getReference("SpecialOpenHours/${date}").get().addOnCompleteListener {
-                                    if(it.isSuccessful){
-                                        val startTime = it.result?.child("startTime")?.value.toString()
-                                        val endTime = it.result?.child("endTime")?.value.toString()
-                                        val sharedPref = getSharedPreferences("Data", MODE_PRIVATE)
-                                        val adminID: String? = sharedPref.getString("AdminID", "Error")
-
-                                        if (FirebaseAuth.getInstance().uid == adminID || checkTimeAvailability(reservations, duration, dayHours,startTime, endTime)) {
-                                            if (intent.hasExtra("Reservation")) {
-                                                val oldRes = intent.getParcelableExtra<Reservation>("Reservation")
-                                                if (oldRes.day == day && oldRes.month == month && oldRes.year == year) {
-                                                    FirebaseDatabase.getInstance().getReference("Reservation").child(oldRes.day.plus(",").plus(oldRes.month).plus(",").plus(oldRes.year)).removeValue()
-                                                }
-                                                val reservation = Reservation(oldRes.reservationID, userID, service, day, month, year, startHour, startMinute, endHour, endMinute, note)
-                                                ref.child(oldRes.reservationID.toString()).setValue(reservation)
-                                                        .addOnSuccessListener {
-                                                            Toast.makeText(this@ReservationActivity, "Updated!", Toast.LENGTH_SHORT).show()
-                                                        }
-                                                        .addOnFailureListener {
-                                                            Toast.makeText(this@ReservationActivity, "Failed!", Toast.LENGTH_SHORT).show()
-                                                        }
-
-                                            } else {
-                                                val resID = ref.push().key
-                                                resID?.let { it1 ->
-                                                    val reservation = Reservation(it1, userID, service, day, month, year, startHour, startMinute, endHour, endMinute, note)
-                                                    ref.child(it1).setValue(reservation)
-                                                            .addOnSuccessListener {
-                                                                Toast.makeText(this@ReservationActivity, "Reserved!", Toast.LENGTH_SHORT).show()
-                                                            }
-                                                            .addOnFailureListener {
-                                                                Toast.makeText(this@ReservationActivity, "Failed!", Toast.LENGTH_SHORT).show()
-                                                            }
-                                                    FirebaseFirestore.getInstance().collection("Reservations").document(it1).set(reservation)
-
-
-                                                }
-                                            }
-                                        } else {
-
-                                        }
-
-                                    }
-                                }
-
-                            }
-                        }
-
-
-                    }
 
                 }
             }
-        }
+
     }
 
-    private fun checkTimeAvailability(it: Task<DataSnapshot>, duration: Int, dayHours: Day?, startTime: String, endTime: String): Boolean {
+    private fun getServicesDuration() {     //nacitam služby a spocitam dlžku
+
+        FirebaseDatabase.getInstance().getReference("Services").get()
+            .addOnCompleteListener { services ->
+                duration = 0
+                services.result!!.children.forEach {
+                    if (selectedServices.contains(it.key))
+                        duration += it.child("duration").value.toString().toInt()
+                }
+                getOpenHours()
+            }
+    }
+
+    fun getOpenHours() {    //nacitam otvaraciu dobu aj pre specialne datumy
+        val calendar = Calendar.getInstance()
+        calendar.set(year.toInt(), month.toInt() - 1, day.toInt())
+        val dayInWeek = calendar.get(Calendar.DAY_OF_WEEK).toString()
+        FirebaseDatabase.getInstance().getReference("OpenHours/${dayInWeek}").get().addOnSuccessListener{
+            weekDay = it.getValue(Day::class.java)!!
+            FirebaseDatabase.getInstance().getReference("SpecialOpenHours/${date}").get()
+                .addOnSuccessListener {
+                    specialDayStartTime = it.child("startTime")?.value.toString()
+                    specialDayEndTime = it.child("endTime")?.value.toString()
+                    val availability = checkTimeAvailability(dayReservations,duration,weekDay,specialDayStartTime,specialDayEndTime)
+                    val sharedPref = getSharedPreferences("Data", AppCompatActivity.MODE_PRIVATE)
+                    val adminID: String? = sharedPref.getString("AdminID", "Error")
+
+                    if (FirebaseAuth.getInstance().uid == adminID || availability) {
+                        saveNewReservation()
+                    }
+
+
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    fun saveNewReservation() {      //uložim novu rezervaciu
+        val userID = FirebaseAuth.getInstance().uid
+        val services = chooosenService.text.toString()
+        val note = userNote.text.toString()
+        val firebaseDate = day.plus(",").plus(month).plus(",").plus(year)
+
+        val ref = FirebaseDatabase.getInstance().getReference("Reservation").child(firebaseDate)
+        val resID = ref.push().key  //vygenure nove ID
+        resID?.let { it1 ->
+            val reservation = Reservation(it1, userID, services, date, startTime, endTime, note)
+            ref.child(it1).setValue(reservation)
+                .addOnSuccessListener {
+                    if (intent.hasExtra("Reservation")) {
+                        Toast.makeText(this@ReservationActivity, "Rezervácia urpavená.", Toast.LENGTH_SHORT).show()
+                        removeOldReservation(intent.getParcelableExtra<Reservation>("Reservation"))             //vymazem staru rezervaciu
+                    }
+                    Toast.makeText(this@ReservationActivity, "Rezervácia vytvorená.", Toast.LENGTH_SHORT).show()
+
+                }
+
+                .addOnFailureListener {
+                    Toast.makeText(this@ReservationActivity, it.toString(), Toast.LENGTH_SHORT).show()
+                }
+            FirebaseFirestore.getInstance().collection("Reservations").document(it1).set(reservation)
+        }
+
+    }
+
+    private fun removeOldReservation(oldReservation: Reservation?) {
+
+        val splitDate = oldReservation!!.date!!.split(".")
+
+        val oldResDate = splitDate.component1().plus(",").plus(splitDate.component2()).plus(",").plus(splitDate.component3())//ziskam datum
+        FirebaseDatabase.getInstance().getReference("Reservation").child(oldResDate).child(oldReservation.reservationID.toString()).removeValue()
+        FirebaseFirestore.getInstance().collection("Reservations").document(oldReservation.reservationID.toString()).delete()
+    }
+
+    //kontrola či sa môže rezervácia vytvoriť v datom datume a čase
+    private fun checkTimeAvailability(reservations: DataSnapshot, duration: Int, dayHours: Day?, startTime: String, endTime: String): Boolean {
         val newHourStart = startHour.toInt() * 100
-        val newMinuteStart = startMinute.toInt()
+        val newMinuteStart = startMinute.toInt()        //zvolený čas pre začiatok nvoej rezervácie
 
         var finMin: Int = newMinuteStart + duration
         var finHour: Int = startHour.toInt()
 
-        if (finMin >= 60) {
+        if (finMin >= 60) {     //prepočitanie času
             finHour += finMin / 60
             finMin %= 60
         }
@@ -231,7 +279,7 @@ class ReservationActivity : AppCompatActivity() {
 
 
         val choosenDate = Calendar.getInstance()
-        choosenDate.set(year.toInt(), month.toInt() - 1, day.toInt(), newHourStart, newMinuteStart)
+        choosenDate.set(year.toInt(), month.toInt() - 1, day.toInt(), newHourStart, newMinuteStart) // nastavim si kalendar na zvoleny datum a čas aby som mohol skontrlovať ci neni v minulosti
         val currentDate = Calendar.getInstance()
 
         if (choosenDate.time <= currentDate.time) {
@@ -268,7 +316,6 @@ class ReservationActivity : AppCompatActivity() {
                     Toast.makeText(this, "Nie je možné vytvoriť rezerváciu na daný termín, prosím, kontaktujte náš salón.", Toast.LENGTH_SHORT).show()
                     return false
 
-
                 }else{
                     val dayStart = (dayHours.startHour?.toInt()!! * 100) + dayHours.startMinute.toInt()
                     val dayEnd = (dayHours.endHour?.toInt()!! *100) + dayHours.endMinute.toInt()
@@ -286,12 +333,17 @@ class ReservationActivity : AppCompatActivity() {
             oldRes = intent.getParcelableExtra<Reservation>("Reservation")
         }
 
-        it.result?.children?.forEach {
+        reservations.children?.forEach {
+           // prejdem všetky rezervacie z toho dňa či sa neprekryvaju, ak je to moja ktoru upravujem tak ju ignorujem
             if(oldRes != null  && oldRes.reservationID != it.child("reservationID").value.toString()) {
-                val reservedHourStart = it.child("startHour").value.toString().toInt() * 100
-                val reservedMinuteStart = it.child("startMinute").value.toString().toInt()
-                val reservedHourEnding = it.child("endHour").value.toString().toInt() * 100
-                val reservedMinuteEnding = it.child("endMinute").value.toString().toInt()
+                val startTimeSplit = it.child("startTime").value.toString().split(":")     // vytiahnem si hodiny a minuty a skontrolujem či sa prekryvaju
+                val reservedHourStart = startTimeSplit.component1().toInt() * 100
+                val reservedMinuteStart = startTimeSplit.component2().toInt()
+
+                val endTimeSplit = it.child("endTime").value.toString().split(":")
+                val reservedHourEnding = endTimeSplit.component1().toInt() * 100
+                val reservedMinuteEnding = endTimeSplit.component2().toInt()
+
                 val reservedTimeStart = reservedHourStart + reservedMinuteStart
                 val reservedTimeEnd = reservedHourEnding + reservedMinuteEnding
 
@@ -331,21 +383,20 @@ class ReservationActivity : AppCompatActivity() {
         })
     }
 
-    private  fun saveDate(){
-        val date = this.choosenDate.text.toString().split(".")
-        day = date.component1()
-        month = date.component2()
-        year = date.component3()
+    private  fun saveDate(){        //len uložím datum
+        date = this.choosenDate.text.toString()
+        val splitDate = date.split(".")
+        day = splitDate.component1()
+        month = splitDate.component2()
+        year = splitDate.component3()
 
     }
 
-    private fun saveTime(){
-        val time = choosenTime.text.toString().split(":")
-        startHour = time.component1()
-        startMinute = time.component2()
-
-
-
+    private fun saveTime(){     // uložim čas
+        startTime = choosenTime.text.toString()
+        val splitTime = startTime.split(":")
+        startHour = splitTime.component1()
+        startMinute = splitTime.component2()
     }
 
 

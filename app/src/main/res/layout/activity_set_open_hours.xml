@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bachelor.reservation.SetOpenHours"
+    tools:context="com.bachelor.reservation.adminActivities.SetOpenHours"
     >
 
 
@@ -15,7 +15,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#DCDCDC"
+
 >
 
 
@@ -213,7 +213,7 @@
 
     <EditText
         android:id="@+id/firstStartTime"
-        android:background="#FFFFFF"
+
         android:padding="5dp"
         android:minWidth="65dp"
         android:layout_width="wrap_content"
@@ -225,7 +225,7 @@
 
     <EditText
         android:id="@+id/firstEndTime"
-        android:background="#FFFFFF"
+
         android:padding="5dp"
         android:minWidth="65dp"
         android:layout_width="wrap_content"
@@ -252,6 +252,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="36dp"
         android:layout_marginTop="20dp"
+        android:textAllCaps="false"
         android:text="@string/save_open_hours"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/firstEndTime" />
@@ -297,7 +298,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
-        android:text="Pridať deň"
+        android:textAllCaps="false"
+        android:text="@string/prida_d_tum"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/choosenDate" />
 
@@ -319,7 +321,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/special_date_hours"
         android:textAlignment="center"
-        android:background="#DCDCDC"
+        android:background="#EEEEEE"
         app:layout_constraintTop_toBottomOf="@+id/saveTimes"
         tools:layout_editor_absoluteX="167dp" />
 

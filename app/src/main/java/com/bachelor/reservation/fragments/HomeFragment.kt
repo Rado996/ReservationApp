@@ -6,29 +6,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bachelor.reservation.AddService
-import com.bachelor.reservation.Procedure
-import com.bachelor.reservation.SetOpenHours
+import com.bachelor.reservation.adminActivities.AddService
+import com.bachelor.reservation.activities.Procedure
+import com.bachelor.reservation.adminActivities.SetOpenHours
 import com.bachelor.reservation.classes.Day
 import com.bachelor.reservation.classes.Service
-import com.bachelor.reservation.specialHoursViewHolder
+import com.bachelor.reservation.viewHolders.servicesViewHolder
+import com.bachelor.reservation.viewHolders.specialHourViewHolder
 import com.bachelor.reservationapp.R
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import com.xwray.groupie.Item
-import kotlinx.android.synthetic.main.activity_set_open_hours.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.service_item.view.*
-import kotlinx.android.synthetic.main.special_date_item.view.*
-import kotlinx.android.synthetic.main.special_date_open_hours_item.view.*
 
 
 class HomeFragment : Fragment(), View.OnClickListener {
@@ -37,25 +34,32 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
-
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
+
+
         viewOfLayout = inflater!!.inflate(R.layout.fragment_home, container, false)
+        val sharedPref = viewOfLayout.context.getSharedPreferences("Data", AppCompatActivity.MODE_PRIVATE)
+        val adminID: String? = sharedPref.getString("AdminID", "Error")
+        if(FirebaseAuth.getInstance().uid == adminID){
 
-        viewOfLayout.addServiceBtn.setOnClickListener {
-            addNewService()
+            viewOfLayout.addServiceBtn.setVisibility(View.VISIBLE)
+            viewOfLayout.setOpenTime.setVisibility(View.VISIBLE)
+
+            viewOfLayout.addServiceBtn.setOnClickListener {
+                addNewService()
+            }
+
+            viewOfLayout.setOpenTime.setOnClickListener {
+                val intent= Intent(activity, SetOpenHours::class.java)
+                startActivity(intent)
+            }
         }
 
-        viewOfLayout.setOpenTime.setOnClickListener {
-            val intent= Intent(activity, SetOpenHours::class.java)
-            startActivity(intent)
-        }
+
 
         loadOpenHours()
         setupSpecialDates()
@@ -66,7 +70,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
     }
 
+
     private fun loadOpenHours() {
+
         FirebaseDatabase.getInstance().getReference("OpenHours").get().addOnCompleteListener {
             if(it.isSuccessful){
                 var day = it.result?.child("2")?.getValue(Day::class.java)
@@ -160,51 +166,22 @@ class HomeFragment : Fragment(), View.OnClickListener {
         startActivity(intent)
     }
 
-    private fun listServices() {
-        val layout = viewOfLayout.linearLayoutServices
-        servicesList.forEach { it ->
 
-            //val buttonView: View = layoutInflater.inflate(R.layout.service_item,linearLayoutServices)
-
-            val button = Button(context)
-            button.id = it.id!!.toInt()
-            button.text = it.title
-            button.setOnClickListener { btn->
-                onClick(btn)
-            }
-
-            viewOfLayout.linearLayoutServices.addView(button)
-        }
-
-        //viewOfLayout = layoutInflater!!.inflate(R.layout.fragment_home, parentFragment?.linearLayoutServices, false)
-        // prerobit aby sa nacitavali len raz
-    }
-
-
-    private fun loadServices() {
+    private fun loadServices() {    // nacitam služby z databazy, vytvorim adapter a vložim do neho služby
+        val adapter = GroupAdapter<GroupieViewHolder>()
         val ref = FirebaseDatabase.getInstance().getReference("Services")
-        ref.get().addOnCompleteListener {
-            if(it.isSuccessful) {
-                val services = it
-                val result = services.result
-                val kids = result?.children
-                servicesList.clear()
-                kids?.forEach {
-
-                    val service = Service(
-                            it.child("id").value.toString(),
-                            it.child("title").value.toString(),
-                            it.child("pictureLink").value.toString(),
-                            it.child("description").value.toString(),
-                            it.child("duration").value.toString(),
-                    )
-                    servicesList.add(service)
-                }
-                listServices()
-            } else{
-                Toast.makeText(context, "Nepodarilo sa načítať dáta.", Toast.LENGTH_SHORT).show()
+        ref.get().addOnSuccessListener {
+           it.children?.forEach {
+                val service = it.getValue(Service::class.java)
+                adapter.add(servicesViewHolder(service!!))
             }
+            servivesRecyclerView.adapter = adapter
+            servivesRecyclerView.layoutManager = LinearLayoutManager(context)
+
         }
+            .addOnFailureListener {
+                Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
+            }
 
     }
 
@@ -251,17 +228,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
     }
 }
 
-class specialHourViewHolder(val datep: String, val startHours: String, val endHours:String): Item<GroupieViewHolder>(){
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        val date = datep.split(',')
-        viewHolder.itemView.specialDateTextView.text = date.component1().plus(".").plus(date.component2()).plus(".").plus(date.component3())
-        if(endHours == "") {
-            viewHolder.itemView.specialTimeTextView.text = startHours
-        }else {
-            viewHolder.itemView.specialTimeTextView.text = startHours.plus(" - ").plus(endHours)
-        }
-    }
 
-    override fun getLayout() = R.layout.special_date_item
 
-}
+

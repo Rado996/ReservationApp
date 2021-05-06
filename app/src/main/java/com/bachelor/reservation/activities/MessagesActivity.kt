@@ -1,4 +1,4 @@
-package com.bachelor.reservation
+package com.bachelor.reservation.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,12 +6,13 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bachelor.reservation.classes.Message
 import com.bachelor.reservation.classes.UserConversation
+import com.bachelor.reservation.viewHolders.MessageFromViewHolder
+import com.bachelor.reservation.viewHolders.MessageToViewHolder
 import com.bachelor.reservationapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.activity_messages.*
 import kotlinx.android.synthetic.main.message_from.view.*
 import kotlinx.android.synthetic.main.message_to.view.*
@@ -151,55 +152,10 @@ class MessagesActivity : AppCompatActivity() {
                     TODO("Not yet implemented")
                 }
             })
-
-//            convRef.addListenerForSingleValueEvent(object: ValueEventListener {
-//                override fun onDataChange(snapshot: DataSnapshot) {
-//
-//
-//                    if(snapshot.hasChildren()) {
-//                        snapshot.children.forEach {
-//                           val message: Message = it.getValue(Message::class.java)!!
-//                            if(message.fromUserID == curUserID){
-//                                adapter.add(MessageFromViewHolder(message))
-//                            } else{
-//                                adapter.add(MessageToViewHolder(message))
-//                            }
-//
-//
-//                        }
-//                    } else{
-//                        val conversation = UserConversation("", "PFMzSqH2i4auX7MvE5t4nAOtpDH3", "", "Napíšte nám.", "")
-//                        adapter.add(ConversationViewHolder(conversation))
-//                    }
-//                    messagesRecyclerView.adapter = adapter
-//                    messagesRecyclerView.layoutManager = LinearLayoutManager(applicationContext)
-//                }
-//
-//                override fun onCancelled(error: DatabaseError) {
-//                    TODO("Not yet implemented")
-//                }
-//            })
         }
     }
 }
 
 
-class MessageFromViewHolder(val message: com.bachelor.reservation.classes.Message): Item<GroupieViewHolder>(){
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.textFrom.text = message.text
-    }
 
-    override fun getLayout(): Int {
-        return R.layout.message_from
-    }
-}
 
-class MessageToViewHolder(val message: com.bachelor.reservation.classes.Message): Item<GroupieViewHolder>(){
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.textTo.text = message.text
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.message_to
-    }
-}

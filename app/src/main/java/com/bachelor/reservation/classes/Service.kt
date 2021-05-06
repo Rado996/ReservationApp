@@ -3,11 +3,11 @@ package com.bachelor.reservation.classes
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Service(val id: String?,
-                   val title: String?,
-                   val pictureLink: String?,
-                   val description: String?,
-                   val duration: String?
+data class Service(val id: String? = null,
+                   val title: String?= null,
+                   val pictureLink: String?= null,
+                   val description: String?= null,
+                   val duration: String?= null
               ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
