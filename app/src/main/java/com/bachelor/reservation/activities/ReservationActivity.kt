@@ -137,6 +137,23 @@ class ReservationActivity : AppCompatActivity() {
                 }
             }
             chooosenService.setText(Services)
+            reserevation_price.setText("0 €")
+            var price = 0
+            for (service in selectedServices) {
+                FirebaseDatabase.getInstance().getReference("Services/${service}/price").get().addOnSuccessListener {
+                    price += it.value.toString().toInt()
+                    reserevation_price.setText(price.toString().plus(" €"))
+                }
+            }
+            reserevation_duration.setText("0 minút")
+            var duration = 0
+            for (service in selectedServices) {
+                FirebaseDatabase.getInstance().getReference("Services/${service}/duration").get().addOnSuccessListener {
+                    duration += it.value.toString().toInt()
+                    reserevation_duration.setText(duration.toString().plus(" minút"))
+                }
+            }
+
         })
         dialogBuilder.setNegativeButton("Zruš", null)       //navrat button
 
@@ -163,8 +180,8 @@ class ReservationActivity : AppCompatActivity() {
             if(day.isEmpty() || startHour.isEmpty() || services.isNullOrEmpty()){
                 Toast.makeText(this@ReservationActivity, "Prosím skontrolujte zadané údaje.", Toast.LENGTH_SHORT).show()
             }else {
-                val date = day.plus(",").plus(month).plus(",").plus(year)
-                val ref = FirebaseDatabase.getInstance().getReference("Reservation").child(date)        //načítanie všetkych rezervácii toho dátumu
+                val firebaseDate = day.plus(",").plus(month).plus(",").plus(year)
+                val ref = FirebaseDatabase.getInstance().getReference("Reservation").child(firebaseDate)        //načítanie všetkych rezervácii toho dátumu
                 ref.get().addOnSuccessListener { reservations ->
                     dayReservations = reservations
                     getServicesDuration()
@@ -196,7 +213,8 @@ class ReservationActivity : AppCompatActivity() {
         val dayInWeek = calendar.get(Calendar.DAY_OF_WEEK).toString()
         FirebaseDatabase.getInstance().getReference("OpenHours/${dayInWeek}").get().addOnSuccessListener{
             weekDay = it.getValue(Day::class.java)!!
-            FirebaseDatabase.getInstance().getReference("SpecialOpenHours/${date}").get()
+            val firebaseDate = day.plus(",").plus(month).plus(",").plus(year)
+            FirebaseDatabase.getInstance().getReference("SpecialOpenHours/${firebaseDate}").get()
                 .addOnSuccessListener {
                     specialDayStartTime = it.child("startTime")?.value.toString()
                     specialDayEndTime = it.child("endTime")?.value.toString()

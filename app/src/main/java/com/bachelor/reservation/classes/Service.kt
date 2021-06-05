@@ -7,10 +7,12 @@ data class Service(val id: String? = null,
                    val title: String?= null,
                    val pictureLink: String?= null,
                    val description: String?= null,
-                   val duration: String?= null
+                   val duration: String?= null,
+                   val price: String?= null
               ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
+            parcel.readString(),
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
@@ -24,6 +26,7 @@ data class Service(val id: String? = null,
         parcel.writeString(pictureLink)
         parcel.writeString(description)
         parcel.writeString(duration)
+        parcel.writeString(price)
     }
 
     override fun describeContents(): Int {

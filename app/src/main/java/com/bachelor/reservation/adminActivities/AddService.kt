@@ -102,7 +102,7 @@ class AddService : AppCompatActivity() {
 
     private fun uploadService(imageUrl: String) {           //vytvorím inštanciu triedy Servce a nahram do databázy
         val ref = FirebaseDatabase.getInstance().getReference("Services")
-        service = Service(serviceId, serviceTitle.text.toString() ,imageUrl, serviceDescription.text.toString(),serviceDuration.text.toString())
+        service = Service(serviceId, serviceTitle.text.toString() ,imageUrl, serviceDescription.text.toString(),serviceDuration.text.toString(),servicePrice.text.toString())
         ref.child(serviceTitle.text.toString()).setValue(service)
             .addOnFailureListener { p0->
                 Toast.makeText(applicationContext, p0.message, Toast.LENGTH_SHORT).show()

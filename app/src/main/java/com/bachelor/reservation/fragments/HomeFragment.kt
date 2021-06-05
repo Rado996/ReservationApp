@@ -73,91 +73,124 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
     private fun loadOpenHours() {
 
-        FirebaseDatabase.getInstance().getReference("OpenHours").get().addOnCompleteListener {
-            if(it.isSuccessful){
-                var day = it.result?.child("2")?.getValue(Day::class.java)
+        FirebaseDatabase.getInstance().getReference("OpenHours").get().addOnSuccessListener {
+            var day = it.child("2")?.getValue(Day::class.java)
 
-                if(day?.startMinute == "" && day?.endMinute == "") {
-                    secondDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
-                } else if(day?.endMinute == ""){
-                    secondDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
-                }  else if(day?.startMinute == ""){
-                    secondDayHours.text = day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                } else{
-                    secondDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                }
+            if (day?.startMinute == "" && day?.endMinute == "") {
+                secondDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
+            } else if (day?.endMinute == "") {
+                secondDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+            } else if (day?.startMinute == "") {
+                secondDayHours.text =
+                    day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":")
+                        .plus(day?.endMinute)
+            } else {
+                secondDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+                        .plus(":").plus(day?.endMinute)
+            }
 
 
-                day = it.result?.child("3")?.getValue(Day::class.java)
-                if(day?.startMinute == "" && day?.endMinute == "") {
-                    thirdDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
-                } else if(day?.endMinute == ""){
-                    thirdDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
-                }  else if(day?.startMinute == ""){
-                    thirdDayHours.text = day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                } else{
-                    thirdDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                }
+            day = it.child("3")?.getValue(Day::class.java)
+            if (day?.startMinute == "" && day?.endMinute == "") {
+                thirdDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
+            } else if (day?.endMinute == "") {
+                thirdDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+            } else if (day?.startMinute == "") {
+                thirdDayHours.text =
+                    day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":")
+                        .plus(day?.endMinute)
+            } else {
+                thirdDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+                        .plus(":").plus(day?.endMinute)
+            }
 
-                day = it.result?.child("4")?.getValue(Day::class.java)
-                if(day?.startMinute == "" && day?.endMinute == "") {
-                    forthDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
-                } else if(day?.endMinute == ""){
-                    forthDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
-                }  else if(day?.startMinute == ""){
-                    forthDayHours.text = day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                } else{
-                    forthDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                }
+            day = it.child("4")?.getValue(Day::class.java)
+            if (day?.startMinute == "" && day?.endMinute == "") {
+                forthDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
+            } else if (day?.endMinute == "") {
+                forthDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+            } else if (day?.startMinute == "") {
+                forthDayHours.text =
+                    day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":")
+                        .plus(day?.endMinute)
+            } else {
+                forthDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+                        .plus(":").plus(day?.endMinute)
+            }
 
-                day = it.result?.child("5")?.getValue(Day::class.java)
-                if(day?.startMinute == "" && day?.endMinute == "") {
-                    fifthDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
-                } else if(day?.endMinute == ""){
-                    fifthDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
-                }  else if(day?.startMinute == ""){
-                    fifthDayHours.text = day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                } else{
-                    fifthDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                }
+            day = it.child("5")?.getValue(Day::class.java)
+            if (day?.startMinute == "" && day?.endMinute == "") {
+                fifthDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
+            } else if (day?.endMinute == "") {
+                fifthDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+            } else if (day?.startMinute == "") {
+                fifthDayHours.text =
+                    day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":")
+                        .plus(day?.endMinute)
+            } else {
+                fifthDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+                        .plus(":").plus(day?.endMinute)
+            }
 
-                day = it.result?.child("6")?.getValue(Day::class.java)
-                if(day?.startMinute == "" && day?.endMinute == "") {
-                    sixthDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
-                } else if(day?.endMinute == ""){
-                    sixthDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
-                }  else if(day?.startMinute == ""){
-                    sixthDayHours.text = day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                } else{
-                    sixthDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                }
+            day = it.child("6")?.getValue(Day::class.java)
+            if (day?.startMinute == "" && day?.endMinute == "") {
+                sixthDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
+            } else if (day?.endMinute == "") {
+                sixthDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+            } else if (day?.startMinute == "") {
+                sixthDayHours.text =
+                    day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":")
+                        .plus(day?.endMinute)
+            } else {
+                sixthDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+                        .plus(":").plus(day?.endMinute)
+            }
 
-                day = it.result?.child("7")?.getValue(Day::class.java)
-                if(day?.startMinute == "" && day?.endMinute == "") {
-                    seventhDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
-                } else if(day?.endMinute == "" ){
-                    seventhDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
-                }  else if(day?.startMinute == "" ){
-                    seventhDayHours.text = day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                } else{
-                    seventhDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                }
+            day = it.child("7")?.getValue(Day::class.java)
+            if (day?.startMinute == "" && day?.endMinute == "") {
+                seventhDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
+            } else if (day?.endMinute == "") {
+                seventhDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+            } else if (day?.startMinute == "") {
+                seventhDayHours.text =
+                    day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":")
+                        .plus(day?.endMinute)
+            } else {
+                seventhDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+                        .plus(":").plus(day?.endMinute)
+            }
 
-                day = it.result?.child("1")?.getValue(Day::class.java)
-                if(day?.startMinute == "" && day?.endMinute == "") {
-                    firstDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
-                } else if(day?.endMinute == ""){
-                    firstDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
-                }  else if(day?.startMinute == "" ){
-                    firstDayHours.text = day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                } else{
-                    firstDayHours.text = day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour).plus(":").plus(day?.endMinute)
-                }
-
-            }else{
-                Toast.makeText(context, "Nepodarilo sa načitať otváraciu dobu.", Toast.LENGTH_SHORT).show()
+            day = it.child("1")?.getValue(Day::class.java)
+            if (day?.startMinute == "" && day?.endMinute == "") {
+                firstDayHours.text = day?.startHour.plus(" - ").plus(day?.endHour)
+            } else if (day?.endMinute == "") {
+                firstDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+            } else if (day?.startMinute == "") {
+                firstDayHours.text =
+                    day?.startHour.plus(":").plus(" - ").plus(day?.endHour).plus(":")
+                        .plus(day?.endMinute)
+            } else {
+                firstDayHours.text =
+                    day?.startHour.plus(":").plus(day?.startMinute).plus(" - ").plus(day?.endHour)
+                        .plus(":").plus(day?.endMinute)
             }
         }
+            .addOnFailureListener {
+                Toast.makeText(context, "Nepodarilo sa načitať otváraciu dobu.", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun addNewService() {

@@ -32,14 +32,17 @@ class GalleryFragment : Fragment() {
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         viewOfLayout = inflater!!.inflate(R.layout.fragment_gallery, container, false)
 
-        val sharedPref = viewOfLayout.context.getSharedPreferences("Data", AppCompatActivity.MODE_PRIVATE)
+        val sharedPref =
+            viewOfLayout.context.getSharedPreferences("Data", AppCompatActivity.MODE_PRIVATE)
         val adminID: String? = sharedPref.getString("AdminID", "Error")
-        if(FirebaseAuth.getInstance().uid == adminID) {
+        if (FirebaseAuth.getInstance().uid == adminID) {
             viewOfLayout.addPicture.setVisibility(View.VISIBLE)
             viewOfLayout.addPicture.setOnClickListener {
                 val intent = Intent(activity, PostPicture::class.java)
@@ -51,30 +54,30 @@ class GalleryFragment : Fragment() {
     }
 
 
-    private fun listPictures() = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            //val images = Firebase.storage.reference
-            val picuresList = mutableListOf<Picture>()
+    private fun listPictures(){
 
-            FirebaseDatabase.getInstance().getReference("Pics").get().addOnCompleteListener {
+        val picuresList = mutableListOf<Picture>()
+        FirebaseDatabase.getInstance().getReference("Pics").get().addOnSuccessListener {
 
-                it.result?.children?.forEach {
+            it.children?.forEach {
 
-                    picuresList.add(Picture(it.key, it.child("link").value.toString(), it.child("description").value.toString()))
-                }
-                val pictureAdapter = pictureAdapter(picuresList)
-                viewOfLayout.recycler_view_gallery_items.apply {
-                    adapter = pictureAdapter
-                    layoutManager = LinearLayoutManager(context)
-                }
+                picuresList.add(
+                    Picture(
+                        it.key,
+                        it.child("link").value.toString(),
+                        it.child("description").value.toString()
+                    )
+                )
             }
-
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
+            val pictureAdapter = pictureAdapter(picuresList)
+            viewOfLayout.recycler_view_gallery_items.apply {
+                adapter = pictureAdapter
+                layoutManager = LinearLayoutManager(context)
             }
         }
+            .addOnFailureListener {
+                Toast.makeText(context, it.toString(), Toast.LENGTH_LONG).show()
+            }
+
     }
-
-
 }

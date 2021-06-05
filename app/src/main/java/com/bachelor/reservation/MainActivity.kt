@@ -82,16 +82,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupData() {
-        FirebaseDatabase.getInstance().getReference("Admin").get().addOnCompleteListener {
-            if (it.isSuccessful){
+        FirebaseDatabase.getInstance().getReference("Admin").get().addOnSuccessListener {
+
                 val sharedPref = getSharedPreferences("Data", MODE_PRIVATE)
                 val editor = sharedPref.edit()
-                editor.putString("AdminID", it.result!!.value.toString())
+                editor.putString("AdminID", it.value.toString())
                 editor.apply()
             }
-        }
+            .addOnFailureListener {
+                Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
+            }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.action_menu, menu)

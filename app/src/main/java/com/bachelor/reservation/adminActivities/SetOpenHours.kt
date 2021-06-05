@@ -47,85 +47,83 @@ class SetOpenHours : AppCompatActivity() {
     }
 
     private fun loadTimes() {
-        FirebaseDatabase.getInstance().getReference("OpenHours").get().addOnCompleteListener {
-            if(it.isSuccessful){
-                var day = it.result?.child("2")?.getValue(Day::class.java)
-                if(day?.startMinute == "") {
-                    secondStartTime.setText(day?.startHour)
-                } else if(day?.endMinute == ""){
-                    secondEndTime.setText(day?.endHour)
-                }  else {
-                    secondStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                    secondEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
-                }
-                day = it.result?.child("3")?.getValue(Day::class.java)
-                if(day?.startMinute == "") {
-                    thirdStartTime.setText(day?.startHour)
-                } else if(day?.endMinute == ""){
-                    thirdEndTime.setText(day?.endHour)
-                }  else {
-                    thirdStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                    thirdEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
-                }
+        FirebaseDatabase.getInstance().getReference("OpenHours").get().addOnSuccessListener {
 
-                day = it.result?.child("4")?.getValue(Day::class.java)
-                if(day?.startMinute == "") {
-                    forthStartTime.setText(day?.startHour)
-                } else if(day?.endMinute == ""){
-                    forthEndTime.setText(day?.endHour)
-                }  else {
-                    forthStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                    forthEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
-                }
+            var day = it.child("2")?.getValue(Day::class.java)
+            if (day?.startMinute == "") {
+                secondStartTime.setText(day?.startHour)
+            } else if (day?.endMinute == "") {
+                secondEndTime.setText(day?.endHour)
+            } else {
+                secondStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                secondEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+            }
+            day = it.child("3")?.getValue(Day::class.java)
+            if (day?.startMinute == "") {
+                thirdStartTime.setText(day?.startHour)
+            } else if (day?.endMinute == "") {
+                thirdEndTime.setText(day?.endHour)
+            } else {
+                thirdStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                thirdEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+            }
 
-                day = it.result?.child("5")?.getValue(Day::class.java)
-                if(day?.startMinute == "") {
-                    fifthStartTime.setText(day?.startHour)
-                } else if(day?.endMinute == ""){
-                    fifthEndTime.setText(day?.endHour)
-                }  else {
-                    fifthStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                    fifthEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
-                }
+            day = it.child("4")?.getValue(Day::class.java)
+            if (day?.startMinute == "") {
+                forthStartTime.setText(day?.startHour)
+            } else if (day?.endMinute == "") {
+                forthEndTime.setText(day?.endHour)
+            } else {
+                forthStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                forthEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+            }
 
-
-                day = it.result?.child("6")?.getValue(Day::class.java)
-                if(day?.startMinute == "") {
-                    sixthStartTime.setText(day?.startHour)
-                } else if(day?.endMinute == ""){
-                    sixthEndTime.setText(day?.endHour)
-                }  else {
-                    sixthStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                    sixthEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
-                }
-
-
-                day = it.result?.child("7")?.getValue(Day::class.java)
-                if(day?.startMinute == "") {
-                    seventhStartTime.setText(day?.startHour)
-                } else if(day?.endMinute == ""){
-                    seventhEndTime.setText(day?.endHour)
-                }  else {
-                    seventhStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                    seventhEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
-                }
-
-
-                day = it.result?.child("1")?.getValue(Day::class.java)
-                if(day?.startMinute == "") {
-                    firstStartTime.setText(day?.startHour)
-                } else if(day?.endMinute == ""){
-                    firstEndTime.setText(day?.endHour)
-                }  else {
-                    firstStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
-                    firstEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
-                }
-
-
+            day = it.child("5")?.getValue(Day::class.java)
+            if (day?.startMinute == "") {
+                fifthStartTime.setText(day?.startHour)
+            } else if (day?.endMinute == "") {
+                fifthEndTime.setText(day?.endHour)
+            } else {
+                fifthStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                fifthEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
             }
 
 
+            day = it.child("6")?.getValue(Day::class.java)
+            if (day?.startMinute == "") {
+                sixthStartTime.setText(day?.startHour)
+            } else if (day?.endMinute == "") {
+                sixthEndTime.setText(day?.endHour)
+            } else {
+                sixthStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                sixthEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+            }
+
+
+            day = it.child("7")?.getValue(Day::class.java)
+            if (day?.startMinute == "") {
+                seventhStartTime.setText(day?.startHour)
+            } else if (day?.endMinute == "") {
+                seventhEndTime.setText(day?.endHour)
+            } else {
+                seventhStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                seventhEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+            }
+
+
+            day = it.child("1")?.getValue(Day::class.java)
+            if (day?.startMinute == "") {
+                firstStartTime.setText(day?.startHour)
+            } else if (day?.endMinute == "") {
+                firstEndTime.setText(day?.endHour)
+            } else {
+                firstStartTime.setText(day?.startHour.plus(":").plus(day?.startMinute))
+                firstEndTime.setText(day?.endHour.plus(":").plus(day?.endMinute))
+            }
         }
+            .addOnFailureListener {
+                Toast.makeText(baseContext, it.toString(), Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun setupSpecialDates() {

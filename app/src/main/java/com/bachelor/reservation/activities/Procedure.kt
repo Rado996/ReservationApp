@@ -18,6 +18,7 @@ class Procedure: AppCompatActivity() {
 
         val service :Service = intent.getParcelableExtra("Service")
         serviceDetailTitle.text = service.title
+        serviceDetailPrice.text = service.price.plus(" €")
         serviceDetailDescription.text = service.description
         serviceDetailDuration.text = service.duration
         //serviceDetailPicture.setImageURI()

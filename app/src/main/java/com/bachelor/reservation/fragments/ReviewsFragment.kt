@@ -77,9 +77,7 @@ class ReviewsFragment : Fragment() {
     }
 
 
-    private  fun listReviews() = CoroutineScope(Dispatchers.IO).launch {
-        try {
-
+    private  fun listReviews() {
             val adapter = GroupAdapter<GroupieViewHolder>()
             val ref = FirebaseDatabase.getInstance().getReference("Reviews")
             ref.addChildEventListener(object: ChildEventListener{
@@ -107,16 +105,7 @@ class ReviewsFragment : Fragment() {
                 override fun onCancelled(error: DatabaseError) {
                     TODO("Not yet implemented")
                 }
-
-
             })
-
-
-        } catch (e: Exception){
-            withContext(Dispatchers.Main) {
-                Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
-            }
-        }
     }
 }
 

@@ -25,7 +25,6 @@
         android:id="@+id/recycler_view_gallery_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
 
         android:background="#f0f0f5"
         app:layout_constraintBottom_toBottomOf="parent"
