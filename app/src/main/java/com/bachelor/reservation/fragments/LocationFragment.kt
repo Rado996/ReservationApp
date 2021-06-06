@@ -2,13 +2,15 @@ package com.bachelor.reservation.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.bachelor.reservationapp.R
 import com.google.android.gms.maps.*
 import kotlinx.android.synthetic.main.fragment_location.view.*
-import android.view.LayoutInflater as LayoutInflater
+
 
 class LocationFragment : Fragment() {
     //,OnMapReadyCallback
@@ -29,7 +31,8 @@ class LocationFragment : Fragment() {
 //
 //        })
         viewOfLayout.webView.settings.javaScriptEnabled = true
-        viewOfLayout.webView.loadUrl("https://www.google.com/maps/place/Mirage/@49.2244495,18.7404273,20.13z/data=!4m5!3m4!1s0x0:0xaddf4af3b1a0d2a3!8m2!3d49.2244223!4d18.7404872")
+        viewOfLayout.webView.setWebViewClient(WebViewClient())
+        viewOfLayout.webView.loadUrl("https://www.google.sk/maps/place/Koceľova+5836%2F4,+821+08+Bratislava/@48.1530253,17.125227,17z/data=!3m1!4b1!4m5!3m4!1s0x476c8949fc822f39:0x9ecf8cccd914515!8m2!3d48.1530253!4d17.1274157")
 
         return viewOfLayout
     }

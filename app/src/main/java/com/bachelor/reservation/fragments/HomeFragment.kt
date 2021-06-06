@@ -1,7 +1,9 @@
 package com.bachelor.reservationapp.fragments
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -58,7 +60,10 @@ class HomeFragment : Fragment(), View.OnClickListener {
                 startActivity(intent)
             }
         }
-
+        viewOfLayout.textView24.setOnClickListener {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.skinform.sk/"))
+            startActivity(browserIntent)
+        }
 
 
         loadOpenHours()
